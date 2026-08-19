@@ -1,0 +1,10 @@
+.product-search-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.product-search-form__content {
+    position: relative;
+    width: min(900px, calc(100vw - 2rem));
+}

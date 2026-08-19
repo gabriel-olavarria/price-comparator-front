@@ -1,0 +1,35 @@
+.search-results {
+    width: min(1200px, 100%);
+    margin-top: 3rem;
+}
+
+.search-results__header h2 {
+    margin: 0;
+
+    color: #202124;
+    font-size: 1.5rem;
+}
+
+.search-results__header p {
+    margin: 0.5rem 0 0;
+    color: #6b7280;
+}
+
+.search-results__stores {
+    width: 100%;
+}
+
+
+/*------------------------------------------------------------
+  FILTRO
+-------------------------------------------------------------*/
+.search-results__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+ 
