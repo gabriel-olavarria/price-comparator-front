@@ -3,6 +3,7 @@ import { SearchResults } from "../components/SearchResults";
 import { useProductSearch } from "../hooks/useProductSearch";
 import { StoreCarousel } from "../components/carousel/StoreCarousel.tsx";
 import { motion } from "motion/react";
+import {MetricsPanel} from "../components/metrics/MetricsPanel.tsx";
 
 export function ProductSearchPage() {
     const {result, isLoading, error, search} = useProductSearch();
@@ -51,7 +52,10 @@ export function ProductSearchPage() {
                     {error}
                 </p>
             )}
-            
+
+           <div className="metrics-section">
+                <MetricsPanel />
+            </div>
 
             {result && (
                 <section className="store-products-container">

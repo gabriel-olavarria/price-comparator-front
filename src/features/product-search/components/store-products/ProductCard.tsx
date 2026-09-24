@@ -1,4 +1,4 @@
-import type {ProductOffer} from "../models/ProductOffer.ts";
+import type {ProductOffer} from "../../models/ProductOffer.ts";
 
 interface ProductCardProps {
     product: ProductOffer;

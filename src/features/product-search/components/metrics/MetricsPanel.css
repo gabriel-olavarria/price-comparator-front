@@ -1,0 +1,33 @@
+.metrics-panel {
+    width: 100%;
+
+    background: #f3f4f6;
+    border: 1px solid #e1e4e8;
+    border-radius: 24px;
+
+    overflow: hidden;
+}
+
+.metrics-panel__header {
+    width: 100%;
+    padding: 20px 28px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.metrics-panel__content {
+    padding: 28px;
+    color:black !important;
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+}
+
+.metrics-panel__summary {
+    width: 100%;
+
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+}

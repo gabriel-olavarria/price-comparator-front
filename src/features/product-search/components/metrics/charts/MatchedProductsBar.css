@@ -1,0 +1,41 @@
+.matched-products-chart {
+    width: 100%;
+}
+
+.matched-products-chart__content {
+    min-width: 1100px;
+}
+
+/*LEGENDA*/
+
+.matched-products-bar {
+    width: 100%;
+}
+
+.matched-products-bar__legend {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+
+.matched-products-bar__dot {
+    display: inline-block;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.matched-products-bar__dot--lider {
+    background-color: #228be6;
+}
+
+.matched-products-bar__dot--jumbo {
+    background-color: #fd7e14;
+}
+
+.matched-products-bar__content {
+    min-width: 1100px;
+}

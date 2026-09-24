@@ -1,7 +1,6 @@
 interface Environment {
     apiUrl: string;
 }
-
 export const environment: Environment = {
-    apiUrl: "http://localhost:5169",
+    apiUrl: import.meta.env.VITE_API_URL,
 };
