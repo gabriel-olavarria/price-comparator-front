@@ -9,7 +9,97 @@ import {
 
 import "./ProductMatches.css";
 
-export function ProductMatches() {
+interface ProductOffer {
+    name: string;
+    price: number;
+    categories: string[];
+    productUrl: string;
+    imageUrl?: string | null;
+    brand?: string | null;
+    sellerName?: string | null;
+    isMarketplace: boolean;
+}
+
+type ProductsByStore = Record<
+    string,
+    ProductOffer[]
+>;
+
+interface ProductMatchesProps {
+    stores: ProductsByStore;
+}
+
+interface MatchRow {
+    name: string;
+    pricesByStore: Record<
+        string,
+        ProductOffer | null
+    >;
+}
+
+export function ProductMatches({
+                                   stores
+                               }: ProductMatchesProps) {
+
+    const storeEntries =
+        Object.entries(stores);
+
+    const storeNames =
+        Object.keys(stores);
+
+    /*
+     * PROVISIONAL:
+     * emparejamos por índice.
+     *
+     * Esto NO es matching real todavía.
+     */
+    const maxProducts = Math.max(
+        0,
+        ...storeEntries.map(
+            ([, products]) =>
+                products.length
+        )
+    );
+
+    const rows: MatchRow[] =
+        Array.from({
+            length: Math.min(
+                maxProducts,
+                10
+            )
+        }).map((_, index) => {
+
+            const pricesByStore:
+                Record<
+                    string,
+                    ProductOffer | null
+                > = {};
+
+            for (const [
+                storeName,
+                products
+            ] of storeEntries) {
+
+                pricesByStore[storeName] =
+                    products[index] ?? null;
+            }
+
+            const firstProduct =
+                storeEntries
+                    .map(
+                        ([, products]) =>
+                            products[index]
+                    )
+                    .find(Boolean);
+
+            return {
+                name:
+                    firstProduct?.name ??
+                    `Producto ${index + 1}`,
+                pricesByStore,
+            };
+        });
+
     return (
         <Card
             className="product-matches"
@@ -17,17 +107,28 @@ export function ProductMatches() {
             padding="lg"
             withBorder
         >
-            <Stack gap={4} mb="lg">
-                <Text fw={700} size="lg">
+            <Stack
+                gap={4}
+                mb="lg"
+            >
+                <Text
+                    fw={700}
+                    size="lg"
+                >
                     Productos coincidentes
                 </Text>
 
-                <Text size="sm" c="dimmed">
+                <Text
+                    size="sm"
+                    c="dimmed"
+                >
                     Productos similares encontrados entre supermercados
                 </Text>
             </Stack>
 
-            <Table.ScrollContainer minWidth={800}>
+            <Table.ScrollContainer
+                minWidth={800}
+            >
                 <Table
                     verticalSpacing="md"
                     horizontalSpacing="lg"
@@ -35,119 +136,140 @@ export function ProductMatches() {
                 >
                     <Table.Thead>
                         <Table.Tr>
+
                             <Table.Th>
                                 Producto
                             </Table.Th>
 
-                            <Table.Th>
-                                Lider
-                            </Table.Th>
+                            {storeNames.map(
+                                storeName => (
+                                    <Table.Th
+                                        key={storeName}
+                                    >
+                                        {storeName}
+                                    </Table.Th>
+                                )
+                            )}
 
-                            <Table.Th>
-                                Jumbo
-                            </Table.Th>
                         </Table.Tr>
                     </Table.Thead>
 
                     <Table.Tbody>
-                        <Table.Tr>
-                            <Table.Td>
-                                <Text fw={600}>
-                                    Coca-Cola Zero 3 L
-                                </Text>
-                            </Table.Td>
 
-                            <Table.Td>
-                                <Group
-                                    justify="space-between"
-                                    wrap="nowrap"
-                                >
-                                    <Text>
-                                        $2.490
-                                    </Text>
+                        {rows.map(
+                            (row, index) => {
 
-                                    <Badge
-                                        variant="light"
-                                        size="sm"
+                                const availablePrices =
+                                    Object.values(
+                                        row.pricesByStore
+                                    )
+                                        .filter(
+                                            (
+                                                product
+                                            ): product is ProductOffer =>
+                                                product !== null &&
+                                                product.price > 0
+                                        )
+                                        .map(
+                                            product =>
+                                                product.price
+                                        );
+
+                                const bestPrice =
+                                    availablePrices.length > 0
+                                        ? Math.min(
+                                            ...availablePrices
+                                        )
+                                        : null;
+
+                                return (
+                                    <Table.Tr
+                                        key={index}
                                     >
-                                        Mejor precio
-                                    </Badge>
-                                </Group>
-                            </Table.Td>
 
-                            <Table.Td>
-                                <Text>
-                                    $2.690
-                                </Text>
-                            </Table.Td>
-                        </Table.Tr>
+                                        <Table.Td>
+                                            <Text fw={600}>
+                                                {row.name}
+                                            </Text>
+                                        </Table.Td>
 
-                        <Table.Tr>
-                            <Table.Td>
-                                <Text fw={600}>
-                                    Coca-Cola Original 2 L
-                                </Text>
-                            </Table.Td>
+                                        {storeNames.map(
+                                            storeName => {
 
-                            <Table.Td>
-                                <Text>
-                                    $2.190
-                                </Text>
-                            </Table.Td>
+                                                const product =
+                                                    row.pricesByStore[
+                                                        storeName
+                                                        ];
 
-                            <Table.Td>
-                                <Group
-                                    justify="space-between"
-                                    wrap="nowrap"
-                                >
-                                    <Text>
-                                        $1.990
-                                    </Text>
+                                                if (!product) {
+                                                    return (
+                                                        <Table.Td
+                                                            key={storeName}
+                                                        >
+                                                            <Text
+                                                                c="dimmed"
+                                                                size="sm"
+                                                            >
+                                                                -
+                                                            </Text>
+                                                        </Table.Td>
+                                                    );
+                                                }
 
-                                    <Badge
-                                        variant="light"
-                                        size="sm"
-                                    >
-                                        Mejor precio
-                                    </Badge>
-                                </Group>
-                            </Table.Td>
-                        </Table.Tr>
+                                                const isBestPrice =
+                                                    bestPrice !== null &&
+                                                    product.price ===
+                                                    bestPrice;
 
-                        <Table.Tr>
-                            <Table.Td>
-                                <Text fw={600}>
-                                    Coca-Cola Light 1.5 L
-                                </Text>
-                            </Table.Td>
+                                                return (
+                                                    <Table.Td
+                                                        key={storeName}
+                                                    >
+                                                        <Group
+                                                            justify="space-between"
+                                                            wrap="nowrap"
+                                                        >
+                                                            <Text>
+                                                                {formatPrice(
+                                                                    product.price
+                                                                )}
+                                                            </Text>
 
-                            <Table.Td>
-                                <Text>
-                                    $1.790
-                                </Text>
-                            </Table.Td>
+                                                            {isBestPrice && (
+                                                                <Badge
+                                                                    variant="light"
+                                                                    size="sm"
+                                                                >
+                                                                    Mejor precio
+                                                                </Badge>
+                                                            )}
+                                                        </Group>
+                                                    </Table.Td>
+                                                );
+                                            }
+                                        )}
 
-                            <Table.Td>
-                                <Group
-                                    justify="space-between"
-                                    wrap="nowrap"
-                                >
-                                    <Text>
-                                        $1.690
-                                    </Text>
+                                    </Table.Tr>
+                                );
+                            }
+                        )}
 
-                                    <Badge
-                                        variant="light"
-                                        size="sm"
-                                    >
-                                        Mejor precio
-                                    </Badge>
-                                </Group>
-                            </Table.Td>
-                        </Table.Tr>
                     </Table.Tbody>
                 </Table>
             </Table.ScrollContainer>
         </Card>
     );
+}
+
+function formatPrice(
+    price: number
+): string {
+    return new Intl.NumberFormat(
+        "es-CL",
+        {
+            style: "currency",
+            currency: "CLP",
+            maximumFractionDigits: 0,
+        }
+    ).format(price);
 }

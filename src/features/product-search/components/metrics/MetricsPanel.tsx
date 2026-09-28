@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
     ActionIcon,
     Collapse,
@@ -14,21 +15,45 @@ import {
 
 import { SummaryBySupermarket } from "./summary/SummaryBySupermarket.tsx";
 import { ProductMatches } from "./matches/ProductMatches.tsx";
+import { ComparableProducts } from "./summary/ComparableProducts.tsx";
+import { MatchedProductsBar } from "./charts/MatchedProductsBar.tsx";
+import { CheapestMatchedProduct } from "./summary/CheapestMatchedProduct.tsx";
 
 import "./MetricsPanel.css";
-import {ComparableProducts} from "./summary/ComparableProducts.tsx";
-import {MatchedProductsBar} from "./charts/MatchedProductsBar.tsx";
-import {CheapestMatchedProduct} from "./summary/CheapestMatchedProduct.tsx";
 
-export function MetricsPanel() {
+export interface ProductOffer {
+    name: string;
+    price: number;
+    categories: string[];
+    productUrl: string;
+    imageUrl?: string | null;
+    brand?: string | null;
+    sellerName?: string | null;
+    isMarketplace: boolean;
+}
+
+export type ProductsByStore = Record<
+    string,
+    ProductOffer[]
+>;
+
+interface MetricsPanelProps {
+    stores: ProductsByStore;
+}
+
+export function MetricsPanel({stores}: MetricsPanelProps) {
+
     const [opened, setOpened] = useState(true);
 
     return (
         <div className="metrics-panel">
+
             <Group
                 justify="space-between"
                 className="metrics-panel__header"
-                onClick={() => setOpened((current) => !current)}
+                onClick={() =>
+                    setOpened(current => !current)
+                }
             >
                 <div>
                     <Text
@@ -51,10 +76,17 @@ export function MetricsPanel() {
                     variant="subtle"
                     size="lg"
                     radius="md"
-                    aria-label={opened ? "Minimizar métricas" : "Mostrar métricas"}
+                    aria-label={
+                        opened
+                            ? "Minimizar métricas"
+                            : "Mostrar métricas"
+                    }
                     onClick={(event) => {
                         event.stopPropagation();
-                        setOpened((current) => !current);
+
+                        setOpened(
+                            current => !current
+                        );
                     }}
                 >
                     {opened ? (
@@ -66,19 +98,40 @@ export function MetricsPanel() {
             </Group>
 
             <Collapse expanded={opened}>
+
                 <Stack
                     className="metrics-panel__content"
                     gap="xl"
                 >
+
                     <div className="metrics-panel__summary">
-                        <SummaryBySupermarket />
-                        <ComparableProducts />
-                        <CheapestMatchedProduct />
+
+                        <SummaryBySupermarket
+                            stores={stores}
+                        />
+
+                        <ComparableProducts
+                            stores={stores}
+                        />
+
+                        <CheapestMatchedProduct
+                            stores={stores}
+                        />
+
                     </div>
-                    <ProductMatches />
-                    <MatchedProductsBar />
+
+                    <ProductMatches
+                        stores={stores}
+                    />
+
+                    <MatchedProductsBar
+                        stores={stores}
+                    />
+
                 </Stack>
+
             </Collapse>
+
         </div>
     );
 }
