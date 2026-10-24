@@ -1,4 +1,489 @@
-.summary-by-supermarket {
+
+/* =========================================
+   TARJETA DE SUPERMERCADOS
+========================================= */
+
+.market-card {
+    --market-purple: #8053ef;
+    --market-purple-dark: #43238c;
+    --market-text: #151126;
+    --market-muted: #85809e;
+
+    position: relative;
+    box-sizing: border-box;
+
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
+
+    height: 565px;
+    min-height: 565px;
+    max-height: 565px;
+
+    flex-shrink: 0;
+    overflow: hidden;
+
+    border-radius: 30px;
+    background: #f0eaff;
+
+    box-shadow:
+            0 14px 32px rgba(70, 47, 126, 0.10),
+            0 4px 10px rgba(70, 47, 126, 0.04);
+
+    font-family: inherit;
+}
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.market-card__header {
+    position: relative;
+    z-index: 1;
+
+    height: 215px;
+    padding: 26px 28px 0;
+
+    box-sizing: border-box;
+    overflow: visible;
+
+    background: linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #faf9ff 65%,
+            #f2edff 100%
+    );
+}
+
+.market-card__heading {
+    position: relative;
+    z-index: 5;
+}
+
+.market-card__title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    color: var(--market-purple-dark);
+}
+
+.market-card__title-row svg {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.market-card__title-row h2 {
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.6px;
+
+    color: var(--market-text);
+}
+
+/* =========================================
+   RESUMEN
+========================================= */
+
+.market-card__summary {
+    margin-top: 25px;
+}
+
+.market-card__summary p {
+    margin: 0 0 5px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: var(--market-muted);
+}
+
+.market-card__summary strong {
+    display: block;
+
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+
+    color: var(--market-text);
+}
+
+/* =========================================
+   TRES CÍRCULOS CONCÉNTRICOS
+========================================= */
+
+.market-card__decoration {
+    position: absolute;
+
+    top: 76px;
+    right: -55px;
+
+    width: 210px;
+    height: 210px;
+
+    pointer-events: none;
+    z-index: 2;
+}
+
+.market-card__decoration span {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+}
+
+.market-card__decoration span:nth-child(1) {
+    inset: 0;
+
+    background: rgba(145, 112, 240, 0.13);
+}
+
+.market-card__decoration span:nth-child(2) {
+    inset: 40px 0 0 40px;
+
+    background: rgba(145, 112, 240, 0.25);
+}
+
+.market-card__decoration span:nth-child(3) {
+    inset: 85px 0 0 85px;
+
+    background: linear-gradient(
+            135deg,
+            #a58af8,
+            #7542e8
+    );
+}
+
+/* =========================================
+   SECCIÓN INFERIOR
+========================================= */
+
+.market-card__body {
+    position: relative;
+    z-index: 3;
+
+    height: 350px;
+    margin-top: 0;
+
+    padding: 22px 28px 16px;
+    box-sizing: border-box;
+
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+}
+
+/* =========================================
+   CURVA EN S
+   Decorativa: no ocupa espacio del listado
+========================================= */
+
+.market-card__body::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: -29px;
+    bottom: 0;
+
+    z-index: -1;
+    pointer-events: none;
+
+    background: linear-gradient(
+            160deg,
+            #eee7ff 0%,
+            #e8deff 55%,
+            #f2eaff 100%
+    );
+
+    clip-path: shape(
+            from 0% 8%,
+            curve to 100% 0% with 30% -10% / 70% 22%,
+            line to 100% 100%,
+            line to 0% 100%,
+            close
+    );
+}
+
+/* =========================================
+   LISTADO DE SUPERMERCADOS
+========================================= */
+
+.market-card__stores {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   FILA DE SUPERMERCADO
+========================================= */
+
+.market-card__store {
+    display: grid;
+
+    grid-template-columns:
+    42px minmax(0, 1fr) 42px;
+
+    align-items: center;
+    column-gap: 12px;
+
+    min-height: 64px;
+    padding: 8px 0;
+
+    box-sizing: border-box;
+}
+
+.market-card__store + .market-card__store {
+    border-top: 1px solid rgba(
+            116,
+            83,
+            193,
+            0.13
+    );
+}
+
+/* =========================================
+   ÍCONOS DE SUPERMERCADOS
+========================================= */
+
+.market-card__store-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    box-shadow: 0 4px 10px rgba(
+            0,
+            0,
+            0,
+            0.06
+    );
+}
+
+.market-card__store-icon span {
+    color: #ffffff;
+
+    font-size: 19px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+/* =========================================
+   INFORMACIÓN DEL SUPERMERCADO
+========================================= */
+
+.market-card__store-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    min-width: 0;
+}
+
+.market-card__store-name {
+    font-size: 14px;
+    font-weight: 650;
+
+    color: #282044;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================
+   BARRAS DE PROGRESO
+========================================= */
+
+.market-card__progress {
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+    border-radius: 20px;
+
+    background: rgba(
+            123,
+            89,
+            213,
+            0.16
+    );
+}
+
+.market-card__progress-fill {
+    height: 100%;
+    border-radius: inherit;
+
+    background: linear-gradient(
+            90deg,
+            #a987ff,
+            #8053ef
+    );
+
+    transition: width 0.45s ease;
+}
+
+/* =========================================
+   CANTIDADES
+========================================= */
+
+.market-card__store-total {
+    text-align: right;
+
+    font-size: 16px;
+    font-weight: 750;
+
+    color: #201936;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.market-card__chevron {
+    color: var(--market-purple);
+
+    font-size: 24px;
+    font-weight: 300;
+    text-align: right;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .market-card {
+        max-width: 100%;
+
+        height: 545px;
+        min-height: 545px;
+        max-height: 545px;
+
+        border-radius: 24px;
+    }
+
+    .market-card__header {
+        height: 205px;
+        padding: 22px 20px 0;
+    }
+
+    .market-card__title-row {
+        gap: 10px;
+    }
+
+    .market-card__title-row h2 {
+        font-size: 20px;
+    }
+
+    .market-card__title-row svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    .market-card__summary {
+        margin-top: 24px;
+    }
+
+    .market-card__summary p {
+        font-size: 13px;
+    }
+
+    .market-card__summary strong {
+        font-size: 46px;
+    }
+
+    .market-card__decoration {
+        top: 76px;
+        right: -55px;
+
+        width: 190px;
+        height: 190px;
+    }
+
+    .market-card__decoration span:nth-child(2) {
+        inset: 34px 0 0 34px;
+    }
+
+    .market-card__decoration span:nth-child(3) {
+        inset: 75px 0 0 75px;
+    }
+
+    .market-card__body {
+        position: relative;
+        z-index: 3;
+        height: 350px;
+        margin-top: 0;
+        padding: 22px 28px 16px;
+        box-sizing: border-box;
+        background: #eee7ff;
+        border-radius: 0;
+        overflow: visible;
+    }
+
+    .market-card__body::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -49px;
+        height: 71px;
+        z-index: -1;
+        pointer-events: none;
+        background: #eee7ff;
+        clip-path: path("M 0 43 C 105 -14 185 8 255 25 C 315 39 355 47 429 33 L 425 71 L 0 71 Z");
+    }
+
+    .market-card__store {
+        grid-template-columns:
+      38px minmax(0, 1fr) 38px;
+
+        column-gap: 10px;
+
+        min-height: 60px;
+        padding: 7px 0;
+    }
+
+    .market-card__store-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .market-card__store-icon span {
+        font-size: 17px;
+    }
+
+    .market-card__store-name {
+        font-size: 13px;
+    }
+
+    .market-card__store-total {
+        font-size: 15px;
+    }
+
+    .market-card__chevron {
+        font-size: 22px;
+    }
+}
+
+/* =========================================
+   ACCESIBILIDAD
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .market-card__progress-fill {
+        transition: none;
+    }
 }

@@ -1,15 +1,14 @@
 import { useMemo, useState } from "react";
-import type { ProductOffer } from "../../models/ProductOffer.ts";
+import type { Product } from "../../models/Product.ts";
 import { StoreSection } from "./components/StoreSection.tsx";
 import { FilterCategoryButton } from "./components/filters/FilterCategoryButton.tsx";
 import "./ProductResults.css";
-import {useProductSearchStore} from "../../stores/productSearchStore.ts";
+import { useSearchResultStore } from "../../stores/searchResultStore.ts";
 
-const EMPTY_STORES: Record<string, ProductOffer[]> = {};
+const EMPTY_STORES: Record<string, Product[]> = {};
 
 export function ProductResults() {
-    const stores = useProductSearchStore(state => state.result?.stores) ?? EMPTY_STORES;
-
+    const stores = useSearchResultStore(state => state.search?.stores) ?? EMPTY_STORES;
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
  
@@ -43,7 +42,7 @@ export function ProductResults() {
 
                 return [storeName, filteredProducts];
             })
-        ) as Record<string, ProductOffer[]>;
+        ) as Record<string, Product[]>;
     }, [stores, selectedCategories]);
 
     const filteredTotal = Object.values(filteredStores).reduce(

@@ -1,50 +1,35 @@
 
 import { useCallback, useEffect, useRef } from "react";
 
-import { searchProductOffers } from "../api/searchProductOffers";
+import { useSearchResultStore } from "../stores/searchResultStore";
+import type {SearchParams} from "../models/SearchResponse.ts";
+import {searchProduct} from "../api/searchProduct.ts";
 
-import type {
-    SearchProductOffersParams,
-} from "../models/ProductOffer";
-
-import { useProductSearchStore } from "../stores/productSearchStore";
 
 export function useProductSearch() {
-    const result = useProductSearchStore(state => state.result);
-    const isLoading = useProductSearchStore(state => state.isLoading);
-    const error = useProductSearchStore(state => state.error);
+    const result = useSearchResultStore(state => state.result);
+    const isLoading = useSearchResultStore(state => state.isLoading);
+    const error = useSearchResultStore(state => state.error);
 
-    const setResult = useProductSearchStore(state => state.setResult);
-    const setIsLoading = useProductSearchStore(state => state.setIsLoading);
-    const setError = useProductSearchStore(state => state.setError);
+    const setResult = useSearchResultStore(state => state.setResult);
+    const setIsLoading = useSearchResultStore(state => state.setIsLoading);
+    const setError = useSearchResultStore(state => state.setError);
 
     const abortControllerRef = useRef<AbortController | null>(null);
 
-    const search = useCallback(
-        async (
-            query: string,
-            categories: string[],
-            turnstileToken: string
-        ): Promise<void> => {
+    const search = 
+        useCallback(async (query: string, categories: string[], turnstileToken: string): Promise<void> => {
             abortControllerRef.current?.abort();
-
             const controller = new AbortController();
             abortControllerRef.current = controller;
 
-            const params: SearchProductOffersParams = {
-                query,
-                categories,
-            };
+            const params: SearchParams = {query, categories};
 
             try {
                 setIsLoading(true);
                 setError(null);
 
-                const response = await searchProductOffers(
-                    params,
-                    turnstileToken,
-                    controller.signal
-                );
+                const response = await searchProduct(params, turnstileToken, controller.signal);
 
                 if (abortControllerRef.current !== controller) {
                     return;

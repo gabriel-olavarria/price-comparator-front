@@ -1,4 +1,362 @@
-.comparable-products {
+
+/* =========================================
+   TARJETA DE PRODUCTOS CANÓNICOS
+========================================= */
+
+.canonical-card {
+    --canonical-purple: #8053ef;
+    --canonical-purple-dark: #43238c;
+    --canonical-text: #151126;
+    --canonical-muted: #85809e;
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
+    height: 565px;
+    min-height: 565px;
+    max-height: 565px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: none;
+    border-radius: 30px !important;
+    background: #f0eaff;
+    box-shadow:
+            0 14px 32px rgba(70, 47, 126, 0.10),
+            0 4px 10px rgba(70, 47, 126, 0.04);
+
+    font-family: inherit;
+    container-type: inline-size;
+    min-width: 0;
 }
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.canonical-card__header {
+    position: relative;
+    z-index: 4;
+    height: 340px;
+    padding: 16px 14px 0;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.canonical-card__heading {
+    position: relative;
+    z-index: 5;
+}
+
+.canonical-card__title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    color: var(--canonical-purple-dark);
+}
+
+.canonical-card__title svg {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.canonical-card__title h2 {
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.6px;
+
+    color: var(--canonical-text);
+}
+
+.canonical-card__subtitle {
+    margin-top: 12px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: var(--canonical-muted);
+}
+
+/* =========================================
+   GRÁFICO CIRCULAR
+========================================= */
+
+.canonical-card__chart {
+    position: relative;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 4px;
+    padding: 0;
+}
+
+.canonical-card__ring {
+    position: relative;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 300px;
+    top: -25px;
+}
+
+.canonical-card__ring-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.canonical-card__ring-chart svg {
+    width: 100%;
+    height: 100%;
+}
+.canonical-card__total {
+    font-size: 25px;
+    line-height: 1.1;
+    font-weight: 800;
+
+    color: var(--canonical-text);
+}
+
+.canonical-card__total-label {
+    margin-top: 3px;
+
+    font-size: 11px;
+    color: var(--canonical-muted);
+}
+
+/* =========================================
+   SECCIÓN INFERIOR
+========================================= */
+
+.canonical-card__footer {
+    position: relative;
+    z-index: 3;
+    height: 225px;
+    margin-top: 0;
+    padding: 0 28px 16px;
+    box-sizing: border-box;
+    background: transparent;
+    overflow: visible;
+}
+
+/* =========================================
+   CURVA EN S
+========================================= */
+
+.canonical-card__footer::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -30px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+            160deg,
+            #eee7ff 0%,
+            #e8deff 55%,
+            #f2eaff 100%
+    );
+
+    clip-path: path("M 0 43 C 105 -14 185 8 255 25 C 315 39 355 47 429 33 L 425 280 L 0 280 Z");
+}
+/* =========================================
+   LISTADO DE SUPERMERCADOS
+========================================= */
+
+.canonical-card__stores {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.canonical-card__store {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 45px;
+    padding: 9px 0;
+
+    box-sizing: border-box;
+}
+
+.canonical-card__store + .canonical-card__store {
+    border-top: 1px solid rgba(116, 83, 193, 0.13);
+}
+
+.canonical-card__store-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-width: 0;
+}
+
+.canonical-card__store-dot {
+    display: block;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.canonical-card__store-name {
+    font-size: 14px;
+    font-weight: 650;
+
+    color: #282044;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.canonical-card__store-count {
+    min-width: 28px;
+
+    text-align: right;
+    font-size: 16px;
+    font-weight: 750;
+
+    color: #201936;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .canonical-card {
+        width: 100%;
+        max-width: 100%;
+
+        height: 545px;
+        min-height: 545px;
+        max-height: 545px;
+
+        border-radius: 24px !important;
+    }
+
+    .canonical-card__header {
+        height: 310px;
+        padding: 20px 20px 0;
+    }
+
+    .canonical-card__title {
+        gap: 10px;
+    }
+
+    .canonical-card__title h2 {
+        font-size: clamp(17px, 5vw, 20px);
+    }
+
+    .canonical-card__title svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .canonical-card__subtitle {
+        font-size: 13px;
+        margin-top: 10px;
+    }
+
+    .canonical-card__chart {
+        margin-top: 0;
+    }
+
+    .canonical-card__ring {
+        width: 100%;
+        max-width: 250px;
+        height: 250px;
+        top: -12px;
+    }
+
+    .canonical-card__total {
+        font-size: 23px;
+    }
+
+    .canonical-card__total-label {
+        font-size: 11px;
+    }
+
+    .canonical-card__footer {
+        height: 235px;
+        padding: 12px 20px 14px;
+        background: #eee7ff;
+    }
+
+    .canonical-card__footer::before {
+        top: -41px;
+        clip-path:  path("M 0 28 C 105 -14 185 8 255 25 C 315 39 355 47 429 33 L 425 71 L 0 71 Z")
+    }
+
+    .canonical-card__footer-title {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .canonical-card__store {
+        min-height: 39px;
+        padding: 6px 0;
+    }
+
+    .canonical-card__store-info {
+        gap: 10px;
+    }
+
+    .canonical-card__store-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .canonical-card__store-name {
+        font-size: 13px;
+    }
+
+    .canonical-card__store-count {
+        font-size: 14px;
+    }
+}
+
+/* =========================================
+   PANTALLAS MUY ESTRECHAS
+========================================= */
+
+@media (max-width: 360px) {
+
+    .canonical-card__header {
+        height: 295px;
+    }
+
+    .canonical-card__ring {
+        max-width: 220px;
+        height: 220px;
+        top: -5px;
+    }
+
+    .canonical-card__footer {
+        height: 250px;
+    }
+
+    .canonical-card__title h2 {
+        font-size: 17px;
+    }
+}
+

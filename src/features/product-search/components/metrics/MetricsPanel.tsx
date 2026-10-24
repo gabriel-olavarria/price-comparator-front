@@ -1,35 +1,19 @@
-import {useMemo, useState} from "react";
+import { useState} from "react";
 import {ActionIcon, Collapse, Group, Stack, Text,} from "@mantine/core";
 import {ChevronDown, ChevronUp,} from "lucide-react";
-import { QuantitiesSection } from "./components/quantities-market/QuantitiesSection";
-import { ProductMatches } from "./components/matches-comparision-product/ProductMatches";
-import { MatchedProductsBar } from "./components/matched-product/MatchedProductsBar";
+
 import "./MetricsPanel.css";
-import {CheapestProductBar} from "./components/matched-product/CheapestProductBar.tsx";
-import {
-    type CanonicalProductGroup,
-    getCheapestComparableProduct,
-    getCheapestProductByStore,
-} from "../../services/productCanonical";
+import {useSearchResultStore} from "../../stores/searchResultStore.ts";
+import {QuantitiesSection} from "./components/quantities-market/QuantitiesSection.tsx";
 
-interface MetricsPanelProps {
-    groups: CanonicalProductGroup[];
-}
-export function MetricsPanel({groups}: MetricsPanelProps) {
+
+export function MetricsPanel() {
     const [opened, setOpened] = useState(true);
-  //  const cheapestGroups = useMemo(() => getCheapestProductByStore(groups), [groups]);
-  //  const comparableGroups = useMemo(
-   //     () => cheapestGroups.filter(group => group.products.length >= 2),
-   //      [cheapestGroups]
-   //  );
-   //
-   //  const cheapestComparableProduct = useMemo(
-   //      () => getCheapestComparableProduct(comparableGroups),
-   //      [comparableGroups]
-   //  );
 
-    //console.log("CHEAPEST CANONICAL GROUPS:", cheapestGroups);
-    //console.log("COMPARABLE GROUPS:", comparableGroups);
+    const metrics = useSearchResultStore(
+        state => state.metrics
+    );
+  console.log(metrics);
     
     return (
         <div className="metrics-panel">
@@ -49,7 +33,7 @@ export function MetricsPanel({groups}: MetricsPanelProps) {
             </Group>
             <Collapse expanded={opened}>
                 <Stack className="metrics-panel__content" gap="xl">
-                    {/*<QuantitiesSection cheapestComparableProduct={cheapestComparableProduct}/>*/}
+                    <QuantitiesSection />
                     {/*<ProductMatches comparableGroups={comparableGroups}/>*/}
                     {/*<MatchedProductsBar comparableGroups={comparableGroups}/>*/}
                     {/*<CheapestProductBar comparableGroups={comparableGroups}/>*/}

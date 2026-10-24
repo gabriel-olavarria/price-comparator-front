@@ -1,5 +1,5 @@
 .metrics-panel {
-    width: 100%;
+    width: min(1200px, 100%);
 
     background: #f3f4f6;
     border: 1px solid #e1e4e8;
@@ -17,17 +17,38 @@
 
 .metrics-panel__content {
     padding: 28px;
-    color:black !important;
+    color: black !important;
+
     display: flex;
     flex-direction: column;
-
     gap: 28px;
+
+    min-width: 0;
+    container-type: inline-size;
 }
 
 .metrics-panel__counts {
-    width: 100%;
-
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: stretch;
     gap: 24px;
+    width: 100%;
+}
+
+.metrics-panel__counts > * {
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+}
+
+@media (max-width: 1100px) {
+    .metrics-panel__counts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .metrics-panel__counts {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

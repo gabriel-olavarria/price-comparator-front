@@ -1,223 +1,150 @@
+
 import {
     Card,
-    Group,
     RingProgress,
     Stack,
     Text,
     Tooltip,
 } from "@mantine/core";
 
+import { ChartPie } from "lucide-react";
 import { useState } from "react";
 
-import type { ProductOffer } from "../../../../models/ProductOffer";
-
+import { useSearchResultStore } from "../../../../stores/searchResultStore.ts";
 import "../styles/QuantitiesChartByMarket.css";
 
-type ProductsByStore = Record<string, ProductOffer[]>;
-
-interface QuantitiesChartByMarketProps {
-    stores: ProductsByStore;
+interface StoreSection {
+    store: string;
+    quantity: number;
+    value: number;
+    color: string;
 }
 
-export function QuantitiesChartByMarket({
-                                            stores,
-                                        }: QuantitiesChartByMarketProps) {
+const STORE_COLORS: Record<string, string> = {
+    Lider: "#228BE6",
+    Jumbo: "#FD7E14",
+    Unimarc: "#FA5252",
+    Tottus: "#40C057",
+    SantaIsabel: "#7950F2",
+    SantalIsabel: "#7950F2",
+};
 
-    const [hoveredStore, setHoveredStore] =
-        useState<{
-            store: string;
-            quantity: number;
-        } | null>(null);
+const FALLBACK_COLORS = [
+    "#15AABF",
+    "#BE4BDB",
+    "#FAB005",
+    "#E64980",
+];
 
-    const storeEntries =
-        Object.entries(stores);
-
-    const totalProducts =
-        storeEntries.reduce(
-            (total, [, products]) =>
-                total + products.length,
-            0
-        );
-
-    const sections =
-        totalProducts > 0
-            ? storeEntries
-                .filter(
-                    ([, products]) =>
-                        products.length > 0
-                )
-                .map(
-                    ([store, products], index) => ({
-                        value:
-                            (
-                                products.length /
-                                totalProducts
-                            ) * 100,
-
-                        color:
-                            getStoreColor(
-                                store,
-                                index
-                            ),
-
-                        store,
-                        quantity:
-                        products.length,
-                    })
-                )
-            : [];
-
+function getStoreColor(store: string, index: number): string {
     return (
-        <Card
-            className="comparable-products"
-            radius="lg"
-            padding="lg"
-            withBorder
-        >
-            <Text
-                fw={700}
-                size="lg"
-            >
-                Productos encontrados
-            </Text>
-
-            <Group
-                mt="lg"
-                justify="space-between"
-                align="center"
-                wrap="nowrap"
-            >
-                <Tooltip
-                    label={
-                        hoveredStore
-                            ? `${hoveredStore.store}: ${hoveredStore.quantity} productos`
-                            : ""
-                    }
-                    opened={hoveredStore !== null}
-                    position="top"
-                    withArrow
-                >
-                    <div
-                        onMouseLeave={() =>
-                            setHoveredStore(null)
-                        }
-                    >
-                        <RingProgress
-                            size={130}
-                            thickness={14}
-                            sections={sections.map(
-                                section => ({
-                                    value:
-                                    section.value,
-                                    color:
-                                    section.color,
-                                })
-                            )}
-                            label={
-                                <Stack
-                                    gap={0}
-                                    align="center"
-                                >
-                                    <Text
-                                        fw={700}
-                                        size="xl"
-                                    >
-                                        {totalProducts}
-                                    </Text>
-
-                                    <Text
-                                        size="xs"
-                                        c="dimmed"
-                                    >
-                                        productos
-                                    </Text>
-                                </Stack>
-                            }
-                        />
-                    </div>
-                </Tooltip>
-
-                <Stack gap="md">
-                    {sections.map(
-                        section => (
-                            <Group
-                                key={section.store}
-                                gap="sm"
-                                wrap="nowrap"
-                                onMouseEnter={() =>
-                                    setHoveredStore({
-                                        store:
-                                        section.store,
-                                        quantity:
-                                        section.quantity,
-                                    })
-                                }
-                                onMouseLeave={() =>
-                                    setHoveredStore(null)
-                                }
-                            >
-                                <span
-                                    style={{
-                                        width: 12,
-                                        height: 12,
-                                        borderRadius:
-                                            "50%",
-                                        backgroundColor:
-                                        section.color,
-                                        display:
-                                            "inline-block",
-                                    }}
-                                />
-
-                                <Text
-                                    size="sm"
-                                    style={{
-                                        minWidth: 110,
-                                    }}
-                                >
-                                    {section.store}
-                                </Text>
-
-                                <Text fw={700}>
-                                    {section.quantity}
-                                </Text>
-                            </Group>
-                        )
-                    )}
-                </Stack>
-            </Group>
-        </Card>
+        STORE_COLORS[store] ??
+        FALLBACK_COLORS[index % FALLBACK_COLORS.length]
     );
 }
 
-function getStoreColor(
-    store: string,
-    index: number
-): string {
+export function QuantitiesChartByMarket() {
+    const totalProductsByCanonicalKey =
+        useSearchResultStore(
+            (state) => state.metrics?.totalProductsByCanonicalKey
+        ) ?? [];
 
-    const colors: Record<
-        string,
-        string
-    > = {
-        Lider: "#228BE6",
-        Jumbo: "#FD7E14",
-        Unimarc: "#FA5252",
-        Tottus: "#40C057",
-        SantaIsabel: "#7950F2",
-    };
+    const [hoveredStore, setHoveredStore] = useState<StoreSection | null>(null);
 
-    const fallbackColors = [
-        "#15AABF",
-        "#BE4BDB",
-        "#FAB005",
-        "#E64980",
-    ];
+    const totalProducts = totalProductsByCanonicalKey.reduce(
+        (total, item) => total + item.totalCanonicalKey,
+        0
+    );
+
+    const sections: StoreSection[] =
+        totalProductsByCanonicalKey.map((item, index) => ({
+            store: item.store,
+            quantity: item.totalCanonicalKey,
+            value: totalProducts > 0 ? (item.totalCanonicalKey / totalProducts) * 100 : 0,
+            color: getStoreColor(item.store, index),
+        }));
 
     return (
-        colors[store] ??
-        fallbackColors[
-        index %
-        fallbackColors.length
-            ]
+        <Card className="canonical-card" padding={0} radius={0}>
+            <div className="canonical-card__header">
+                <div className="canonical-card__heading">
+                    <div className="canonical-card__title">
+                        <ChartPie size={30} strokeWidth={2} />
+                        <Text component="h2">
+                            Productos canónicos
+                        </Text>
+                    </div>
+
+                    <Text className="canonical-card__subtitle">
+                        Distribución por supermercado
+                    </Text>
+                </div>
+
+                <div className="canonical-card__chart">
+                    <Tooltip
+                        label={hoveredStore ? `${hoveredStore.store}: ${hoveredStore.quantity} canónicos` : ""}
+                        opened={hoveredStore !== null}
+                        position="top"
+                        withArrow
+                    >
+                        <div className="canonical-card__ring" onMouseLeave={() => setHoveredStore(null)}>
+                            <RingProgress
+                                className="canonical-card__ring-chart"
+                                thickness={17}
+                                roundCaps={false}
+                                sections={sections
+                                    .filter((section) => section.quantity > 0)
+                                    .map((section) => ({
+                                        value: section.value,
+                                        color: section.color,
+                                        tooltip: `${section.store}: ${section.quantity}`,
+                                    }))}
+                                label={
+                                    <Stack gap={0} align="center">
+                                        <Text className="canonical-card__total">
+                                            {totalProducts}
+                                        </Text>
+
+                                        <Text className="canonical-card__total-label">
+                                            canónicos
+                                        </Text>
+                                    </Stack>
+                                }
+                            />
+                        </div>
+                    </Tooltip>
+                </div>
+            </div>
+
+            <div className="canonical-card__footer">
+                <div className="canonical-card__stores">
+                    {sections.map((section) => (
+                        <div
+                            key={section.store}
+                            className="canonical-card__store"
+                            onMouseEnter={() => setHoveredStore(section)}
+                            onMouseLeave={() => setHoveredStore(null)}
+                        >
+                            <div className="canonical-card__store-info">
+                <span
+                    className="canonical-card__store-dot"
+                    style={{
+                        backgroundColor: section.color,
+                    }}
+                />
+
+                                <Text className="canonical-card__store-name">
+                                    {section.store}
+                                </Text>
+                            </div>
+
+                            <Text className="canonical-card__store-count">
+                                {section.quantity}
+                            </Text>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </Card>
     );
 }

@@ -8,6 +8,7 @@ import { useProductSearch } from "../hooks/useProductSearch";
 import { StoreCarousel } from "../components/carousel/StoreCarousel";
 import { ProductResults } from "../components/product-results/ProductResults";
 import { TurnstileVerification } from "../security/TurnstileVerification";
+import {MetricsPanel} from "../components/metrics/MetricsPanel.tsx";
 
 interface PendingSearch {
     query: string;
@@ -182,9 +183,13 @@ export function ProductSearchPage() {
             )}
 
             {result && (
-                <section className="store-products-container">
-                    <ProductResults />
-                </section>
+                <>
+                    <MetricsPanel />
+
+                    <section className="store-products-container">
+                        <ProductResults />
+                    </section>
+                </>
             )}
         </main>
     );

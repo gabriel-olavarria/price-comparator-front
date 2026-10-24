@@ -1,37 +1,104 @@
-import {Card, Divider, Group, Stack, Text,} from "@mantine/core";
-import type { ProductOffer } from "../../../../models/ProductOffer";
 import "../styles/QuantitiesByMarket.css";
+import {useSearchResultStore} from "../../../../stores/searchResultStore.ts";
 
 
-type ProductsByStore = Record<string, ProductOffer[]>;
+const STORE_COLORS = [
+    "#1677f2",
+    "#169b55",
+    "#e72d45",
+    "#ef3858",
+    "#72c936",
+];
 
-interface QuantitiesByMarketProps {
-    stores: ProductsByStore;
-}
-/*
- * (PRIMERA TARJETA
- * TABLA COMPARATIVA DE SUPERMERCADOS 
- */
-export function QuantitiesByMarket({stores}: QuantitiesByMarketProps) {
+export function QuantitiesByMarket() {
 
-    const supermarkets = Object.entries(stores);
+    const totalProductsByStore = useSearchResultStore(
+        (state) => state.metrics?.totalProductsByStore
+    ) ?? [];
+    
+    const totalProducts = totalProductsByStore.reduce((total, item) => total + item.totalProducts, 0);
+    const maxProducts = Math.max(...totalProductsByStore.map((item) => item.totalProducts), 1);
+
+    const formatNumber = (value: number) => new Intl.NumberFormat("es-CL").format(value);
 
     return (
-        <Card className="summary-by-supermarket" radius="lg" padding="lg" withBorder>
-            <Text fw={700} size="lg">Cantidad de productos</Text>
-            <Stack gap={0} mt="md">
-                {supermarkets.map(
-                    ([storeName, products], index) => (
-                        <div key={storeName}>
-                            <Group justify="space-between" py="sm">
-                                <Text>{storeName}</Text>
-                                <Text fw={700}>{products.length}</Text>
-                            </Group>
-                            {index < supermarkets.length - 1 && (<Divider />)}
-                        </div>
-                    )
-                )}
-            </Stack>
-        </Card>
+        <article className="market-card">
+            <div className="market-card__header">
+                <div className="market-card__heading">
+                    <div className="market-card__title-row">
+                        <svg
+                            width="35"
+                            height="35"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                        </svg>
+
+                        <h2>Supermercados</h2>
+                    </div>
+
+                    <div className="market-card__summary">
+                        <p>Productos encontrados</p>
+                        <strong>{formatNumber(totalProducts)}</strong>
+                    </div>
+                </div>
+
+                <div className="market-card__decoration" aria-hidden="true">
+                    <span/>
+                    <span/>
+                    <span/>
+                </div>
+            </div>
+
+            <div className="market-card__body">
+                <div className="market-card__stores">
+                    {totalProductsByStore.map((item, index) => {
+                        const percentage =
+                            (item.totalProducts / maxProducts) * 100;
+
+                        return (
+                            <div className="market-card__store" key={item.store}>
+                                <div
+                                    className="market-card__store-icon"
+                                    style={{
+                                        backgroundColor:
+                                            STORE_COLORS[index % STORE_COLORS.length],
+                                    }}
+                                >
+                  <span>
+                    {item.store.charAt(0).toUpperCase()}
+                  </span>
+                                </div>
+
+                                <div className="market-card__store-info">
+                  <span className="market-card__store-name">
+                    {item.store}
+                  </span>
+
+                                    <div className="market-card__progress">
+                                        <div
+                                            className="market-card__progress-fill"
+                                            style={{width: `${percentage}%`}}
+                                        />
+                                    </div>
+                                </div>
+
+                                <strong className="market-card__store-total">
+                                    {formatNumber(item.totalProducts)}
+                                </strong>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </article>
     );
 }

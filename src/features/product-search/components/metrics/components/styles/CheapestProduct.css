@@ -1,15 +1,351 @@
+
 .cheapest-matched-product {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+
     width: 100%;
+    min-width: 0;
+    max-height: 565px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+
+    background: linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #faf9ff 75%,
+            #f7f4ff 100%
+    );
+
+    border: 1px solid #e8deff;
+    border-radius: 26px !important;
+
+    box-shadow: 0 10px 28px rgba(51, 31, 113, 0.07);
+}
+
+/* ENCABEZADO */
+
+.cheapest-matched-product__header {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 24px 24px 0;
+}
+
+.cheapest-matched-product__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+    background: #eee7ff;
+    color: #6037d8;
+}
+
+.cheapest-matched-product__heading {
+    min-width: 0;
+}
+
+.cheapest-matched-product__title {
+    margin: 0;
+
+    font-size: clamp(18px, 1.8vw, 23px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+
+    color: #151044;
+}
+
+.cheapest-matched-product__subtitle {
+    margin-top: 5px;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: #8987b8;
+}
+
+/* PRODUCTO */
+
+.cheapest-matched-product__content {
+    position: relative;
+    z-index: 2;
+
+    display: grid;
+    grid-template-columns: minmax(0, 43%) minmax(0, 1fr);
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 32px 24px 0;
+    min-width: 0;
+}
+
+.cheapest-matched-product__image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 170px;
+    min-width: 0;
+
+    padding: 12px;
+    box-sizing: border-box;
+
+    border-radius: 18px;
+    background: linear-gradient(
+            145deg,
+            #f3efff,
+            #eae2ff
+    );
 }
 
 .cheapest-matched-product__image {
-    width: 90px;
-    height: 90px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cheapest-matched-product__placeholder {
+    font-size: 12px;
+    color: #8987b8;
+}
+
+.cheapest-matched-product__information {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 10px;
+    min-width: 0;
+}
+
+.cheapest-matched-product__name {
+    margin: 0;
+
+    font-size: clamp(15px, 1.5vw, 19px);
+    font-weight: 750;
+    line-height: 1.35;
+
+    overflow-wrap: anywhere;
+    color: #151044;
+}
+
+.cheapest-matched-product__store {
+    font-size: 15px;
+    font-weight: 500;
+    color: #8987b8;
+}
+
+.cheapest-matched-product__price {
+    margin-top: 4px;
+
+    font-size: clamp(28px, 3vw, 37px);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -1px;
+
+    color: #6037d8;
+    font-variant-numeric: tabular-nums;
+}
+
+/* CÍRCULOS INFERIORES */
+
+.cheapest-matched-product__circles {
+    position: absolute;
+    z-index: 0;
+
+    right: 0;
+    bottom: 82px;
+
+    width: 160px;
+    height: 160px;
+
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.cheapest-matched-product__circle {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.cheapest-matched-product__circle--outer {
+    width: 210px;
+    height: 210px;
+
+    right: -105px;
+    bottom: -105px;
+
+    background: #eee7ff;
+}
+
+.cheapest-matched-product__circle--middle {
+    width: 155px;
+    height: 155px;
+
+    right: -95px;
+    bottom: -95px;
+
+    background: #d4c4ff;
+}
+
+.cheapest-matched-product__circle--inner {
+    width: 100px;
+    height: 100px;
+
+    right: -75px;
+    bottom: -75px;
+
+    background: #9770f0;
+}
+
+/* ONDA LAVANDA */
+
+.cheapest-matched-product__wave {
+    position: absolute;
+    z-index: 1;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 155px;
+    pointer-events: none;
+}
+
+.cheapest-matched-product__wave svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* BOTÓN */
+
+.cheapest-matched-product__footer {
+    position: relative;
+    z-index: 3;
+
+    width: 100%;
+    margin-top: auto;
+
+    padding: 24px;
+    box-sizing: border-box;
 }
 
 .cheapest-matched-product__button {
-    --button-bg: #5130a8;
-    --button-hover: #2d1b78;
+    --button-bg: #8053ef;
+    --button-hover: #6939e4;
     --button-color: #ffffff;
-    border-radius: 8px;
+
+    width: 100%;
+    height: 52px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: linear-gradient(
+            100deg,
+            #8053ef 0%,
+            #6839e6 100%
+    );
+
+    color: white;
+    font-size: 16px;
+    font-weight: 750;
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.cheapest-matched-product__button:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(104, 57, 230, 0.25);
+}
+
+.cheapest-matched-product__button:disabled {
+    opacity: 0.5;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .cheapest-matched-product {
+        min-height: 440px;
+    }
+
+    .cheapest-matched-product__content {
+        gap: 14px;
+    }
+
+    .cheapest-matched-product__image-container {
+        height: 150px;
+    }
+}
+
+@media (max-width: 700px) {
+    .cheapest-matched-product {
+        min-height: 430px;
+    }
+
+    .cheapest-matched-product__header {
+        padding: 22px 20px 0;
+    }
+
+    .cheapest-matched-product__content {
+        padding: 26px 20px 0;
+    }
+
+    .cheapest-matched-product__footer {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 380px) {
+    .cheapest-matched-product__header {
+        gap: 10px;
+    }
+
+    .cheapest-matched-product__icon {
+        flex-basis: 44px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .cheapest-matched-product__title {
+        font-size: 17px;
+    }
+
+    .cheapest-matched-product__content {
+        grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+        gap: 10px;
+    }
+
+    .cheapest-matched-product__image-container {
+        height: 125px;
+        padding: 8px;
+    }
+
+    .cheapest-matched-product__name {
+        font-size: 14px;
+    }
+
+    .cheapest-matched-product__price {
+        font-size: 27px;
+    }
 }
