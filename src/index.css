@@ -25,3 +25,8 @@ body {
     box-sizing: border-box;
 }
 
+.turnstile-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}

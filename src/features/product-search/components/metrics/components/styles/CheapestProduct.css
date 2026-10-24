@@ -1,0 +1,15 @@
+.cheapest-matched-product {
+    width: 100%;
+}
+
+.cheapest-matched-product__image {
+    width: 90px;
+    height: 90px;
+}
+
+.cheapest-matched-product__button {
+    --button-bg: #5130a8;
+    --button-hover: #2d1b78;
+    --button-color: #ffffff;
+    border-radius: 8px;
+}

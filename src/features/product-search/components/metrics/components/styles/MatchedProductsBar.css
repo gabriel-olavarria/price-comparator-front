@@ -39,3 +39,28 @@
 .matched-products-bar__content {
     min-width: 1100px;
 }
+
+.matched-products-bar__tooltip {
+    min-width: 150px;
+    padding: 10px 12px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+.matched-products-bar__tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.matched-products-bar__tooltip-store {
+    font-weight: 600;
+    color: #222;
+}
+
+.matched-products-bar__tooltip-price {
+    font-weight: 700;
+    color: #0F9D58;
+}

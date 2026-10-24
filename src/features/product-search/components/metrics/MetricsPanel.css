@@ -24,7 +24,7 @@
     gap: 28px;
 }
 
-.metrics-panel__summary {
+.metrics-panel__counts {
     width: 100%;
 
     display: flex;

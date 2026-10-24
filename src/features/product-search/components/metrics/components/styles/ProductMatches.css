@@ -1,0 +1,24 @@
+.product-matches {
+    width: 100%;
+}
+
+.product-matches__best-price {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background-color: var(--mantine-color-green-0);
+    color: var(--mantine-color-green-8);
+    font-weight: 700;
+    border: 1px solid var(--mantine-color-green-2);
+    cursor: pointer;
+    transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+}
+
+.product-matches__best-price:hover {
+    transform: translateY(-4px);
+    box-shadow:
+            0 6px 14px rgba(0, 0, 0, .10),
+            0 0 12px rgba(15, 157, 88, .20);
+}

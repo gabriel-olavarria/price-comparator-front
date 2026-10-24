@@ -1,19 +1,20 @@
-import type { ProductOffer } from "../../models/ProductOffer.ts";
+import type { ProductOffer } from "../../../models/ProductOffer";
 import { ProductCard } from "./ProductCard";
-import "./StoreProductsSection.css";
-import {useState} from "react";
+import "./styles/StoreSection.css";
+import { useState } from "react";
 import {ChevronDown} from "lucide-react";
 
-interface StoreProductsSectionProps {
+interface StoreSectionProps {
     storeName: string;
     products: ProductOffer[];
 }
-export function StoreProductsSection({storeName, products}: StoreProductsSectionProps) {
+export function StoreSection({storeName, products}: StoreSectionProps) {
     const [expanded, setExpanded] = useState(true);
     if (products.length === 0) {
         return null;
     }
 
+    
     return (
         <section className="store-products-section">
             <header className="store-products-section__header">
@@ -55,7 +56,7 @@ export function StoreProductsSection({storeName, products}: StoreProductsSection
                     {products.map(product => (
 
                         <ProductCard
-                            key={`${storeName}-${product.name}`}
+                            key={`${storeName}-${product.productUrl}`}
                             product={product}
                         />
 

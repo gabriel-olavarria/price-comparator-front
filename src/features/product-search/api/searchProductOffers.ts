@@ -1,18 +1,23 @@
 import { httpClient } from "../../../shared/api/axios.ts";
-import type {SearchProductOffersParams, SearchProductOffersResponse,} from "../models/ProductOffer.ts";
 
-export async function searchProductOffers(request: SearchProductOffersParams, signal?: AbortSignal): Promise<SearchProductOffersResponse>  {
+import type {
+    SearchProductOffersParams,
+    SearchProductOffersResponse,
+} from "../models/ProductOffer.ts";
 
-    const response = await httpClient.get<SearchProductOffersResponse>(
-            "/api/product-offers/search",
-            {
-                params: {
-                    query: request.query,
-                    categories: request.categories,
-                },
-                signal,
+export async function searchProductOffers(request: SearchProductOffersParams, turnstileToken: string, signal?: AbortSignal): Promise<SearchProductOffersResponse> {
+    const response = await httpClient.get<SearchProductOffersResponse>("/api/product/search",
+        {
+            params: {
+                query: request.query,
+                categories: request.categories,
             },
-        );
-    console.log(response);
+            headers: {
+                "X-Turnstile-Token": turnstileToken,
+            },
+            signal,
+        }
+    );
+
     return response.data;
 }

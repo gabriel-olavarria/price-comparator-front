@@ -1,0 +1,29 @@
+.cheapest-product-bar {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.cheapest-product-bar__tooltip {
+    min-width: 180px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+.cheapest-product-bar__tooltip-store {
+    font-weight: 600;
+    color: #222;
+}
+
+.cheapest-product-bar__tooltip-count {
+    font-weight: 700;
+    color: #0F9D58;
+}
