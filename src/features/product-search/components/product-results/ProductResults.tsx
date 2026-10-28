@@ -61,10 +61,10 @@ export function ProductResults() {
 
                     return (
                         <StoreSection
-                            key={store?.code}
-                            storeName={storeName}
+                            key={store?.code ?? storeName}
+                            storeName={store?.name ?? storeName}
                             products={products}
-                            storeCode={store.code }
+                            storeCode={store?.code ?? storeName}
                         />
                     );
                 })}
