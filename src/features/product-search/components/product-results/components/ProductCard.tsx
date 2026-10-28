@@ -1,9 +1,9 @@
 import { useProductFocusStore } from "../../../stores/productFocusStore";
-import type { ProductOffer } from "../../../models/ProductOffer";
+import type { Product } from "../../../models/Product.ts";
 import "./styles/ProductCard.css";
 
 interface ProductCardProps {
-    product: ProductOffer;
+    product: Product;
 }
 
 export function ProductCard({product}: ProductCardProps) {

@@ -1,5 +1,5 @@
 
-import type { CheapestStoreCount } from "../../../../services/productCheapestCount";
+import type { CheapestStoreCount } from "../../../../models/productCheapestCount.ts";
 import unimarcLogo from "../../../../../../assets/unimarc-logo.svg";
 import jumboLogo from "../../../../../../assets/jumbo-logo.png";
 import liderLogo from "../../../../../../assets/lider-logo.png";

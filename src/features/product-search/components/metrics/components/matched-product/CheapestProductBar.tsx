@@ -5,7 +5,7 @@ import "../styles/CheapestProductBar.css";
 import {useSearchResultStore} from "../../../../stores/searchResultStore.ts";
 import type {CheapestStoreResponse} from "../../../../models/MetricResponse.ts";
 import {StoreLogoTick} from "./StoreLogoTick.tsx";
-import type {CheapestStoreCount} from "../../../../services/productCheapestCount.ts";
+import type {CheapestStoreCount} from "../../../../models/productCheapestCount.ts";
 
 
 const storeColors: Record<string, string> = {
