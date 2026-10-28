@@ -41,7 +41,7 @@
     z-index: 1;
 
     height: 215px;
-    padding: 26px 28px 0;
+    padding: 18px 14px 0;
 
     box-sizing: border-box;
     overflow: visible;
@@ -81,6 +81,20 @@
     letter-spacing: -0.6px;
 
     color: var(--market-text);
+}
+
+.cheapest-matched-product__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+    background: #eee7ff;
+    color: #6037d8;
 }
 
 /* =========================================

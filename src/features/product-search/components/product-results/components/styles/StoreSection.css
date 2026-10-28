@@ -26,8 +26,7 @@
 }
 
 .store-products-section__subtitle {
-    margin: 0.35rem 0 0;
-
+    margin: -0.65rem 0 0;
     color: #6b7280;
     font-size: 0.95rem;
 }
@@ -55,4 +54,52 @@
     .store-products-section__grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* LOGO */
+.store-products-section-container__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.search-results__store-logo {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid var(--mantine-color-gray-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-results__store-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* DETALLE ESPECIAL PARA UNIMARC */
+
+.results-logo-unimarc img {
+    width: 80px;
+    height:  80px;
+    object-fit: cover;
+    filter: none;
+    display: block;
+}
+.search-results__store-info h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--mantine-color-text);
+}
+
+.search-results__store-info p {
+    margin: 5px 0 0;
+    color: var(--mantine-color-dimmed);
+    font-size: 0.95rem;
 }

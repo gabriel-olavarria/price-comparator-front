@@ -7,7 +7,7 @@ import {
     Tooltip,
 } from "@mantine/core";
 
-import { ChartPie } from "lucide-react";
+import {ChartPie} from "lucide-react";
 import { useState } from "react";
 
 import { useSearchResultStore } from "../../../../stores/searchResultStore.ts";
@@ -65,31 +65,37 @@ export function QuantitiesChartByMarket() {
         }));
 
     return (
-        <Card className="canonical-card" padding={0} radius={0}>
-            <div className="canonical-card__header">
-                <div className="canonical-card__heading">
-                    <div className="canonical-card__title">
-                        <ChartPie size={30} strokeWidth={2} />
+        <Card className="quantitie-chart-by-market-card" padding={0} radius={0}>
+            <div className="quantitie-chart-by-market__header">
+                <div className="quantitie-chart-by-market__heading">
+                    <div className="quantitie-chart-by-market__title">
+                        <div className="quantitie-chart-by-market__icon">
+                            <ChartPie size={28} strokeWidth={2.4} />
+                        </div>
                         <Text component="h2">
-                            Productos canónicos
+                            Producto Comparables
+                        </Text>
+                    </div>
+                    <div className="quantitie-chart-by-market__container_subtitle">
+                        <Text  className="quantitie-chart-by-market__subtitle">
+                            Coincidencias en Supermercados
                         </Text>
                     </div>
 
-                    <Text className="canonical-card__subtitle">
-                        Distribución por supermercado
-                    </Text>
-                </div>
 
-                <div className="canonical-card__chart">
+                </div>
+ 
+
+                <div className="quantitie-chart-by-market__chart">
                     <Tooltip
                         label={hoveredStore ? `${hoveredStore.store}: ${hoveredStore.quantity} canónicos` : ""}
                         opened={hoveredStore !== null}
                         position="top"
                         withArrow
                     >
-                        <div className="canonical-card__ring" onMouseLeave={() => setHoveredStore(null)}>
+                        <div className="quantitie-chart-by-market__ring" onMouseLeave={() => setHoveredStore(null)}>
                             <RingProgress
-                                className="canonical-card__ring-chart"
+                                className="quantitie-chart-by-market__ring-chart"
                                 thickness={17}
                                 roundCaps={false}
                                 sections={sections
@@ -101,11 +107,11 @@ export function QuantitiesChartByMarket() {
                                     }))}
                                 label={
                                     <Stack gap={0} align="center">
-                                        <Text className="canonical-card__total">
+                                        <Text className="quantitie-chart-by-market__total">
                                             {totalProducts}
                                         </Text>
 
-                                        <Text className="canonical-card__total-label">
+                                        <Text className="quantitie-chart-by-market__total-label">
                                             canónicos
                                         </Text>
                                     </Stack>
@@ -116,29 +122,29 @@ export function QuantitiesChartByMarket() {
                 </div>
             </div>
 
-            <div className="canonical-card__footer">
-                <div className="canonical-card__stores">
+            <div className="quantitie-chart-by-market__footer">
+                <div className="quantitie-chart-by-market__stores">
                     {sections.map((section) => (
                         <div
                             key={section.store}
-                            className="canonical-card__store"
+                            className="quantitie-chart-by-market__store"
                             onMouseEnter={() => setHoveredStore(section)}
                             onMouseLeave={() => setHoveredStore(null)}
                         >
-                            <div className="canonical-card__store-info">
+                            <div className="quantitie-chart-by-market__store-info">
                 <span
-                    className="canonical-card__store-dot"
+                    className="quantitie-chart-by-market__store-dot"
                     style={{
                         backgroundColor: section.color,
                     }}
                 />
 
-                                <Text className="canonical-card__store-name">
+                                <Text className="quantitie-chart-by-market__store-name">
                                     {section.store}
                                 </Text>
                             </div>
 
-                            <Text className="canonical-card__store-count">
+                            <Text className="quantitie-chart-by-market__store-count">
                                 {section.quantity}
                             </Text>
                         </div>

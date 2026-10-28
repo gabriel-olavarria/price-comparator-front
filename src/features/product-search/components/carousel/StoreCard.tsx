@@ -3,10 +3,7 @@ interface StoreCardProps {
     logoUrl: string;
 }
 
-export function StoreCard({
-                              name,
-                              logoUrl,
-                          }: StoreCardProps) {
+export function StoreCard({name, logoUrl,}: StoreCardProps) {
     return (
         <article className="store-card">
             <img

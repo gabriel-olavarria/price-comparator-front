@@ -10,6 +10,7 @@ export interface Product {
     categories: string[];
     availability: string | null;
     canonicalKey: string | null;
+    canonicalName: string | null;
     score: number;
     normalized: ProductNormalized;
     clasification: ProductClasification | null;

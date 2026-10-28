@@ -27,3 +27,114 @@
     font-weight: 700;
     color: #0F9D58;
 }
+
+
+
+/* ENCABEZADO */
+
+
+.cheapest-product-bar__header {
+    position: relative;
+    z-index: 4;
+    height: 340px;
+    padding: 16px 14px 0;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.cheapest-product-bar__heading {
+    position: relative;
+    z-index: 5;
+}
+
+.cheapest-product-bar__title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    color: var(--canonical-purple-dark);
+}
+
+.cheapest-product-bar__title svg {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.cheapest-product-bar__title h2 {
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.6px;
+
+    color: var(--canonical-text);
+}
+
+.cheapest-product-bar-container__subtitle {
+    display: flex;
+    justify-content: center;
+    margin: -14px -31px 19px -782px
+}
+
+
+.cheapest-product-bar__subtitle {
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #85809e;
+}
+
+.cheapest-product-bar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+    background: #eee7ff;
+    color: #6037d8;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .cheapest-product-bar-container__subtitle {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 0 0;
+    }
+}
+
+@media (max-width: 850px) {
+
+    .cheapest-product-bar-container__subtitle {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .cheapest-product-bar-container__subtitle {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 0 0; 
+    }
+}
+
+@media (max-width: 360px) {
+
+    .cheapest-product-bar-container__subtitle {
+        display: flex;
+        justify-content: center;
+        margin: 0 0 0 0;
+    }
+}

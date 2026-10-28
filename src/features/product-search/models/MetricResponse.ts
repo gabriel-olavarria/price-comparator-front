@@ -3,6 +3,7 @@ export interface MetricResponse {
     totalProductsByCanonicalKey: CanonicalProductTotal[];
     economicProduct: EconomicProduct | null;
     topCanonicalGroups: CanonicalGroupResponse[];
+    cheapestCanonicalStore: CheapestStoreResponse[];
 }
 
 export interface StoreProductTotal {
@@ -22,9 +23,23 @@ export interface EconomicProduct {
     productUrl: string | null;
     imageUrl: string | null;
     canonicalKey: string | null;
+    canonicalName: string | null;
 }
 
 export interface CanonicalGroupResponse {
     canonicalKey: string;
+    canonicalName: string;
     products: EconomicProduct[];
+}
+
+export interface CheapestStoreResponse {
+    store: string;
+    sellerName: string;
+    totalCanonicalEconomic: number;
+    Canonical: Canonical[]
+}
+
+export interface Canonical {
+    canonicalKey: string;
+    product: EconomicProduct;
 }

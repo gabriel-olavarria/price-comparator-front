@@ -1,29 +1,31 @@
 import { useMemo, useState } from "react";
-import { Button, Card, Group, Select, Stack, Table, Text } from "@mantine/core";
-import { ArrowDown, ArrowUp, ArrowUpDown, RotateCcw } from "lucide-react";
+import { Button, Card, Group, Select, Table, Text } from "@mantine/core";
+import {ArrowDown, ArrowUp, ArrowUpDown, PiggyBank, RotateCcw} from "lucide-react";
 import { useProductFocusStore } from "../../../../stores/productFocusStore";
-import type { CanonicalProductGroup, CanonicalProductWithStore } from "../../../../services/productCanonical.ts";
 import "../styles/ProductMatches.css";
-
-interface ProductMatchesProps {
-    comparableGroups: CanonicalProductGroup[];
-}
+import {useSearchResultStore} from "../../../../stores/searchResultStore.ts";
+import type {CanonicalGroupResponse, EconomicProduct} from "../../../../models/MetricResponse.ts";
 
 type SortDirection = "asc" | "desc";
 type SortColumn = string;
 type GeneralSort = "lowestPriceAsc" | "lowestPriceDesc" | "nameAsc" | "nameDesc";
-
+interface SortIndicatorProps {
+    active: boolean;
+    direction: SortDirection;
+}
 interface SortState {
     column: SortColumn;
     direction: SortDirection;
 }
 
-interface SortIndicatorProps {
-    active: boolean;
-    direction: SortDirection;
-}
 
-export function ProductMatches({comparableGroups}: ProductMatchesProps) {
+export function ProductMatches() {
+    const comparableGroups =
+        useSearchResultStore(
+            (state) => state.metrics?.topCanonicalGroups
+        ) ?? [];
+
+    console.log(comparableGroups);
     const [limit, setLimit] = useState("5");
     const [generalSort, setGeneralSort] = useState<GeneralSort>("lowestPriceAsc");
     const [columnSort, setColumnSort] = useState<SortState | null>(null);
@@ -42,15 +44,21 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
     ];
 
     const storeNames = useMemo(
-        () => Array.from(new Set(comparableGroups.flatMap(group => group.products.map(product => product.storeName)))),
+        () => Array.from(
+            new Set(comparableGroups.flatMap(group => 
+                group.products.map(product => product.store)
+            ))),
         [comparableGroups]
     );
 
     const sortedGroups = useMemo(() => {
         const groups = [...comparableGroups];
 
+      
         if (columnSort) {
-            groups.sort((a, b) => compareGroupsByColumn(a, b, columnSort));
+            groups.sort((a, b) => 
+                compareGroupsByColumn(a, b, columnSort)
+            );
         } else {
             groups.sort((a, b) => compareGroupsGeneral(a, b, generalSort));
         }
@@ -103,32 +111,37 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
 
     return (
         <Card className="product-matches" radius="lg" padding="lg" withBorder>
-            <Stack gap={4} mb="lg">
-                <Text fw={700} size="lg">Productos Comparables</Text>
-                <Text size="sm" c="dimmed">Comparación de precios entre supermercados</Text>
-            </Stack>
+            {/* ENCABEZADO */}
+            <div className="product-matches__best-price__heading">
+                <div className="product-matches__best-price__title">
+                    <div className="product-matches__best-price__icon">
+                        <PiggyBank size={28} strokeWidth={2.4} />
+                    </div>
+                    <Text component="h2">
+                        Comparación de Ofertas
+                    </Text>
+                </div>
+                <div className="product-matches__best-price-container__subtitle">
+                    <Text  className="product-matches__best-price__subtitle">
+                        Los productos más económicos 
+                    </Text>
+                </div>
 
-            <Group justify="flex-end" align="flex-end" gap="sm" mb="sm" className="product-matches__controls">
-                <Button variant="light" leftSection={<RotateCcw size={16}/>} onClick={handleReset}>
+
+            </div>
+            <Group justify="flex-end" align="flex-end" gap="sm" mb="sm" className="product-matches__best-price__controls">
+                <Button className="product__button"   style={{ transform: "translateY(14px)" }} leftSection={<RotateCcw size={22} strokeWidth={2.5}/>} onClick={handleReset}>
                     Restablecer
                 </Button>
-
                 <Select
                     label="Mostrar"
                     value={limit}
-                    onChange={value => {
-                        if (value) {
-                            setLimit(value);
-                        }
-                    }}
+                    onChange={value => {if (value) {setLimit(value);}}}
                     data={quantityOptions}
                     w={150}
                     allowDeselect={false}
                     comboboxProps={{withinPortal: true}}
-                    styles={{
-                        option: {color: "var(--mantine-color-text)"},
-                        dropdown: {color: "var(--mantine-color-text)"},
-                    }}
+                    styles={{option: {color: "var(--mantine-color-text)"}, dropdown: {color: "var(--mantine-color-text)"},}}
                 />
 
                 <Select
@@ -139,9 +152,7 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
                     w={180}
                     allowDeselect={false}
                     comboboxProps={{withinPortal: true}}
-                    styles={{
-                        option: {color: "var(--mantine-color-text)"},
-                        dropdown: {color: "var(--mantine-color-text)"},
+                    styles={{option: {color: "var(--mantine-color-text)"}, dropdown: {color: "var(--mantine-color-text)"},
                     }}
                 />
             </Group>
@@ -153,33 +164,18 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
                     <Table verticalSpacing="md" horizontalSpacing="lg" highlightOnHover>
                         <Table.Thead>
                             <Table.Tr>
-                                <Table.Th
-                                    onClick={() => handleColumnSort("name")}
-                                    title="Ordenar por producto"
-                                    style={{cursor: "pointer", userSelect: "none"}}
-                                >
+                                <Table.Th onClick={() => handleColumnSort("name")} title="Ordenar por producto" style={{cursor: "pointer", userSelect: "none"}}>
                                     <Group gap={6} wrap="nowrap">
-                                        <Text fw={700}>Producto</Text>
-                                        <SortIndicator
-                                            active={columnSort?.column === "name"}
-                                            direction={columnSort?.direction ?? "asc"}
-                                        />
+                                        <Text fw={700} >Producto</Text>
+                                        <SortIndicator active={columnSort?.column === "name"} direction={columnSort?.direction ?? "asc"}/>
                                     </Group>
                                 </Table.Th>
 
                                 {storeNames.map(storeName => (
-                                    <Table.Th
-                                        key={storeName}
-                                        onClick={() => handleColumnSort(storeName)}
-                                        title={`Ordenar por precio en ${storeName}`}
-                                        style={{cursor: "pointer", userSelect: "none"}}
-                                    >
+                                    <Table.Th key={storeName} onClick={() => handleColumnSort(storeName)} title={`Ordenar por precio en ${storeName}`} style={{cursor: "pointer", userSelect: "none"}}>
                                         <Group gap={6} wrap="nowrap">
-                                            <Text fw={700}>{storeName}</Text>
-                                            <SortIndicator
-                                                active={columnSort?.column === storeName}
-                                                direction={columnSort?.direction ?? "asc"}
-                                            />
+                                            <Text fw={700} >{storeName}</Text>
+                                            <SortIndicator active={columnSort?.column === storeName} direction={columnSort?.direction ?? "asc"}/>
                                         </Group>
                                     </Table.Th>
                                 ))}
@@ -193,13 +189,13 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
                                 return (
                                     <Table.Tr key={group.canonicalKey}>
                                         <Table.Td>
-                                            <Text fw={600}>{getGroupName(group)}</Text>
+                                            <Text fw={600} >{getGroupCanonicalName(group)}</Text>
                                         </Table.Td>
 
                                         {storeNames.map(storeName => {
                                             const product = getProductByStore(group, storeName);
-                                            const isLowestPrice = product && lowestPrice !== null && product.product.price === lowestPrice;
-
+                                            const isLowestPrice = product !== null && lowestPrice !== null && product.price === lowestPrice;
+                                            
                                             if (!product) {
                                                 return (
                                                     <Table.Td key={storeName}>
@@ -210,11 +206,8 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
 
                                             return (
                                                 <Table.Td key={storeName}>
-                                                    <Text
-                                                        className={isLowestPrice ? "product-matches__best-price" : undefined}
-                                                        onClick={isLowestPrice ? () => goToProduct(product.product.productUrl) : undefined}
-                                                    >
-                                                        {formatPrice(product.product.price)}
+                                                    <Text className={isLowestPrice ? "product-matches__best-price-lower-price" : "product-matches__best-price-great-price" } onClick={isLowestPrice && product.productUrl ? () => goToProduct(product.productUrl!) : undefined}>
+                                                        {formatPrice(product.price)}
                                                     </Text>
                                                 </Table.Td>
                                             );
@@ -230,114 +223,102 @@ export function ProductMatches({comparableGroups}: ProductMatchesProps) {
     );
 }
 
-function getProductByStore(group: CanonicalProductGroup, storeName: string): CanonicalProductWithStore | null {
-    return group.products.find(product => product.storeName === storeName) ?? null;
+function getProductByStore(group: CanonicalGroupResponse, storeName: string): EconomicProduct | null {
+    return group.products.find(
+        product => product.store === storeName
+    ) ?? null;
 }
 
-function getLowestPrice(group: CanonicalProductGroup): number | null {
+function getLowestPrice(group: CanonicalGroupResponse): number | null {
     if (group.products.length === 0) {
         return null;
     }
 
-    return Math.min(...group.products.map(product => product.product.price));
+    return Math.min(
+        ...group.products.map(product => product.price)
+    );
 }
 
-function getGroupName(group: CanonicalProductGroup): string {
-    const product = group.products[0];
-
-    if (!product) {
-        return group.canonicalKey;
-    }
-
-    const subtype = product.subtype ? capitalize(product.subtype.replaceAll("-", " ")) : "";
-    const quantity = product.quantity && product.unit ? `${product.quantity} ${product.unit}` : "";
-
-    return [product.family, subtype, quantity]
-        .filter(Boolean)
-        .map(value => capitalize(String(value)))
-        .join(" ");
+function getGroupCanonicalName(group: CanonicalGroupResponse): string {
+    return group.canonicalName;
 }
 
-function compareGroupsGeneral(a: CanonicalProductGroup, b: CanonicalProductGroup, sort: GeneralSort): number {
+function compareGroupsGeneral(a: CanonicalGroupResponse, b: CanonicalGroupResponse, sort: GeneralSort): number {
     switch (sort) {
         case "lowestPriceAsc":
-            return compareNullablePrices(getLowestPrice(a), getLowestPrice(b), "asc");
+            return compareNullablePrices(getLowestPrice(a), getLowestPrice(b),
+                "asc");
 
         case "lowestPriceDesc":
-            return compareNullablePrices(getLowestPrice(a), getLowestPrice(b), "desc");
+            return compareNullablePrices(
+                getLowestPrice(a),
+                getLowestPrice(b),
+                "desc"
+            );
 
         case "nameAsc":
-            return compareNames(getGroupName(a), getGroupName(b));
+            return compareNames(
+                getGroupCanonicalName(a),
+                getGroupCanonicalName(b)
+            );
 
         case "nameDesc":
-            return compareNames(getGroupName(b), getGroupName(a));
+            return compareNames(
+                getGroupCanonicalName(b),
+                getGroupCanonicalName(a)
+            );
 
         default:
             return 0;
     }
 }
 
-function compareGroupsByColumn(a: CanonicalProductGroup, b: CanonicalProductGroup, sort: SortState): number {
+function compareGroupsByColumn(a: CanonicalGroupResponse, b: CanonicalGroupResponse, sort: SortState): number {
     if (sort.column === "name") {
-        const result = compareNames(getGroupName(a), getGroupName(b));
+        const result = compareNames(
+            getGroupCanonicalName(a),
+            getGroupCanonicalName(b)
+        );
+
         return sort.direction === "asc" ? result : -result;
     }
 
-    return compareNullablePrices(
-        getStorePrice(a, sort.column),
-        getStorePrice(b, sort.column),
-        sort.direction
-    );
+    return compareNullablePrices(getStorePrice(a, sort.column), getStorePrice(b, sort.column), sort.direction);
 }
 
-function getStorePrice(group: CanonicalProductGroup, storeName: string): number | null {
+function getStorePrice(group: CanonicalGroupResponse, storeName: string): number | null {
     const product = getProductByStore(group, storeName);
 
-    if (!product || product.product.price <= 0) {
+    if (!product || product.price <= 0) {
         return null;
     }
 
-    return product.product.price;
+    return product.price;
 }
 
 function compareNullablePrices(priceA: number | null, priceB: number | null, direction: SortDirection): number {
-    if (priceA === null && priceB === null) {
-        return 0;
-    }
-
-    if (priceA === null) {
-        return 1;
-    }
-
-    if (priceB === null) {
-        return -1;
-    }
+    if (priceA === null && priceB === null) return 0;
+    if (priceA === null) return 1;
+    if (priceB === null) return -1;
 
     return direction === "asc" ? priceA - priceB : priceB - priceA;
 }
 
 function compareNames(a: string, b: string): number {
-    return a.localeCompare(b, "es", {sensitivity: "base"});
+    return a.localeCompare(b, "es", {
+        sensitivity: "base"
+    });
 }
 
-function capitalize(value: string): string {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-}
 
 function SortIndicator({active, direction}: SortIndicatorProps) {
     if (!active) {
         return <ArrowUpDown size={15} strokeWidth={1.8} style={{opacity: 0.35}}/>;
     }
 
-    return direction === "asc"
-        ? <ArrowUp size={15} strokeWidth={2}/>
-        : <ArrowDown size={15} strokeWidth={2}/>;
+    return direction === "asc" ? <ArrowUp size={15} strokeWidth={2}/> : <ArrowDown size={15} strokeWidth={2}/>;
 }
 
 function formatPrice(price: number): string {
-    return new Intl.NumberFormat("es-CL", {
-        style: "currency",
-        currency: "CLP",
-        maximumFractionDigits: 0,
-    }).format(price);
+    return new Intl.NumberFormat("es-CL", {style: "currency", currency: "CLP", maximumFractionDigits: 0,}).format(price);
 }

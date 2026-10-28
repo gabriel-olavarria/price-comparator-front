@@ -4,6 +4,8 @@ import { StoreSection } from "./components/StoreSection.tsx";
 import { FilterCategoryButton } from "./components/filters/FilterCategoryButton.tsx";
 import "./ProductResults.css";
 import { useSearchResultStore } from "../../stores/searchResultStore.ts";
+import {Search} from "lucide-react";
+import {Text} from "@mantine/core";
 
 const EMPTY_STORES: Record<string, Product[]> = {};
 
@@ -14,64 +16,58 @@ export function ProductResults() {
  
     const availableCategories = useMemo(() => {
         return Array.from(
-            new Set(
-                Object.values(stores)
-                    .flat()
-                    .flatMap(product => product.categories)
-            ),
+            new Set(Object.values(stores).flat().flatMap(product => product.categories)),
         ).sort((a, b) => a.localeCompare(b, "es"));
     }, [stores]);
 
-    const filteredStores = useMemo(() => {
-        if (selectedCategories.length === 0) {
-            return stores;
-        }
-
-        return Object.fromEntries(
-            Object.entries(stores).map(([storeName, products]) => {
-                const filteredProducts = products.filter(product =>
-                    selectedCategories.some(selectedCategory =>
-                        product.categories.some(productCategory => {
-                            const selected = selectedCategory.toLowerCase();
-                            const current = productCategory.toLowerCase();
-
-                            return current.includes(selected) || selected.includes(current);
-                        })
-                    )
-                );
-
-                return [storeName, filteredProducts];
-            })
-        ) as Record<string, Product[]>;
-    }, [stores, selectedCategories]);
-
-    const filteredTotal = Object.values(filteredStores).reduce(
-        (total, products) => total + products.length,
-        0,
-    );
+ 
+    const filteredTotal = Object.values(stores).reduce((total, products) => total + products.length, 0,);
 
     return (
         <section className="search-results">
-            <div className="search-results__toolbar">
+            {/* ENCABEZADO */}
+            <div className="search-results-init">
+                <div className="search-results__heading">
+                <div className="search-results__title">
+                    <div className="search-results__icon">
+                        <Search size={28} strokeWidth={2.4} />
+                    </div>
+                    <Text component="h2">
+                        Resultados de Búsqueda 
+                    </Text>
+                </div>
+                <div className="search-results-container__subtitle">
+                    <Text  className="search-results__subtitle">
+                        Listado de súpermercados
+                    </Text>
+                </div>
+            </div>
+                <div className="search-results__toolbar">
                 <FilterCategoryButton
                     availableCategories={availableCategories}
                     selectedCategories={selectedCategories}
                     onCategoryChange={setSelectedCategories}
                 />
             </div>
-
+            </div>
             <header className="search-results__header">
                 <p>{filteredTotal} productos encontrados</p>
             </header>
 
             <div className="search-results__stores">
-                {Object.entries(filteredStores).map(([storeName, products]) => (
-                    <StoreSection
-                        key={storeName}
-                        storeName={storeName}
-                        products={products}
-                    />
-                ))}
+         
+                {Object.entries(stores).map(([storeName, products]) => {
+                    const store = products[0]?.store;
+
+                    return (
+                        <StoreSection
+                            key={store?.code}
+                            storeName={storeName}
+                            products={products}
+                            storeCode={store.code }
+                        />
+                    );
+                })}
             </div>
         </section>
     );

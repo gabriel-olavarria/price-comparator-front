@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-.product-matches__best-price {
+.product-matches__best-price-lower-price {
     display: inline-block;
     padding: 6px 10px;
     border-radius: 8px;
@@ -15,10 +15,91 @@
             transform .2s ease,
             box-shadow .2s ease;
 }
-
-.product-matches__best-price:hover {
+.product-matches__best-price-great-price {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background-color: var(--mantine-color-violet-2);
+    color: var(--mantine-color-violet-5);
+    font-weight: 700;
+    border: 1px solid var(--mantine-color-violet-3);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.product-matches__best-price-lower-price:hover,
+.product-matches__best-price-great-price:hover {
     transform: translateY(-4px);
     box-shadow:
-            0 6px 14px rgba(0, 0, 0, .10),
-            0 0 12px rgba(15, 157, 88, .20);
+            0 6px 14px rgba(0, 0, 0, 0.10),
+            0 0 12px rgba(15, 157, 88, 0.20);
 }
+
+
+{/* ENCABEZADO */}
+
+.product-matches__best-price__header {
+    position: relative;
+    z-index: 4;
+    height: 340px;
+    padding: 16px 14px 0;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.product-matches__best-price__heading {
+    position: relative;
+    z-index: 5;
+}
+
+.product-matches__best-price__title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    color: var(--canonical-purple-dark);
+}
+
+.product-matches__best-price__title svg {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.product-matches__best-price__title h2 {
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.6px;
+
+    color: var(--canonical-text);
+}
+
+.product-matches__best-price-container__subtitle {
+    display: flex;
+    margin: -14px 0 2px 66px;
+}
+
+
+.product-matches__best-price__subtitle {
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #85809e;
+}
+
+.product-matches__best-price__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+    background: #eee7ff;
+    color: #6037d8;
+}
+
+
