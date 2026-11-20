@@ -1,0 +1,125 @@
+
+/* ========================================
+   CONTENEDOR
+======================================== */
+
+.cart-stats {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+
+
+
+/* ========================================
+   LISTA DE ESTADÍSTICAS
+======================================== */
+
+.cart-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* ========================================
+   FILAS
+======================================== */
+
+.cart-stats-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    padding: 10px 20px;
+
+    background: #ffffff;
+    border: 1px solid #d8c7fa;
+    border-radius: 14px;
+}
+
+/* ========================================
+   TEXTOS
+======================================== */
+
+.cart-stats-label {
+    flex: 1;
+    min-width: 0;
+
+    color: #30206d;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.cart-stats-value {
+    flex-shrink: 0;
+
+    color: #7200e8;
+    font-size: 28px;
+    font-weight: 750;
+    line-height: 1;
+
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 1024px) {
+    .cart-stats-header h2 {
+        font-size: 19px;
+    }
+
+    .cart-stats-label {
+        font-size: 14px;
+    }
+
+    .cart-stats-value {
+        font-size: 25px;
+    }
+
+    .cart-stats-item {
+        padding: 10px 14px;
+    }
+}
+
+/* ========================================
+   MÓVIL
+======================================== */
+
+@media (max-width: 480px) {
+    .cart-stats {
+        gap: 16px;
+    }
+
+    .cart-stats-header-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .cart-stats-header h2 {
+        font-size: 18px;
+    }
+
+    .cart-stats-item {
+        min-height: 52px;
+        padding: 10px 12px;
+    }
+
+    .cart-stats-label {
+        font-size: 13px;
+    }
+
+    .cart-stats-value {
+        font-size: 24px;
+    }
+}

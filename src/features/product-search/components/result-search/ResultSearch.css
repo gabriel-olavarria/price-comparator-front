@@ -1,0 +1,350 @@
+
+/* ==========================================
+   SECCIÓN PRODUCTOS POR SUPERMERCADO
+========================================== */
+
+.store-products-section {
+    width: 100%;
+    min-width: 0;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #eae7f2;
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   ENCABEZADO
+========================================== */
+
+.store-products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.store-products-header h2 {
+    margin: 0 0 6px;
+    color: #1c1937;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.store-products-header p {
+    margin: 0;
+    color: #77738c;
+    font-size: 13px;
+}
+
+.store-total-results {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #f4efff;
+    color: #7036d9;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ==========================================
+   PESTAÑAS DE SUPERMERCADOS
+========================================== */
+
+.store-tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    padding: 4px 0 14px;
+    scrollbar-width: thin;
+    scrollbar-color: #ded3f7 transparent;
+}
+
+.store-tabs button {
+    flex: 0 0 auto;
+    padding: 10px 16px;
+    border: 1px solid #e5e1ee;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #5c5674;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+}
+
+.store-tabs button:hover:not(.active) {
+    background: #f7f3ff;
+    border-color: #cdb9f5;
+    color: #7036d9;
+}
+
+.store-tabs button.active {
+    background: #7036d9;
+    border-color: #7036d9;
+    color: #ffffff;
+    box-shadow: 0 3px 9px rgba(112, 54, 217, 0.15);
+}
+
+/* ==========================================
+   INFORMACIÓN DEL SUPERMERCADO
+========================================== */
+
+.store-products-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 8px 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #efedf4;
+}
+
+.store-products-info h3 {
+    margin: 0;
+    color: #242039;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.store-products-info span {
+    color: #77738c;
+    font-size: 12px;
+}
+
+/* ==========================================
+   CUADRÍCULA DE PRODUCTOS
+========================================== */
+
+.store-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+/* ==========================================
+   TARJETA DE PRODUCTO
+========================================== */
+
+.store-product-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #eae7f2;
+    border-radius: 14px;
+    background: #ffffff;
+    box-sizing: border-box;
+    transition:
+            box-shadow 0.2s ease,
+            transform 0.2s ease,
+            border-color 0.2s ease;
+}
+
+.store-product-card:hover {
+    border-color: #d8c9f3;
+    box-shadow: 0 7px 18px rgba(44, 30, 89, 0.09);
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   IMAGEN
+========================================== */
+
+.store-product-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 155px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.store-product-image img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.store-product-image span {
+    color: #aaa6b5;
+    font-size: 12px;
+}
+
+/* ==========================================
+   INFORMACIÓN DEL PRODUCTO
+========================================== */
+
+.store-product-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 9px;
+}
+
+.store-product-brand {
+    color: #77738c;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.store-product-content h3 {
+    margin: 0;
+    color: #242039;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    min-height: 38px;
+}
+
+.store-product-price {
+    display: block;
+    margin-top: auto;
+    color: #1c1937;
+    font-size: 21px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.store-product-availability {
+    align-self: flex-start;
+    padding: 4px 9px;
+    border-radius: 8px;
+    background: #e8f9ed;
+    color: #159239;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ==========================================
+   BOTÓN VER PRODUCTO
+========================================== */
+
+.store-product-card .view-product-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 38px;
+    margin-top: 8px;
+    padding: 9px 12px;
+    border: 1px solid #ded3f7;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #7036d9;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+}
+
+.store-product-card .view-product-button:hover {
+    background: #7036d9;
+    border-color: #7036d9;
+    color: #ffffff;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1200px) {
+    .store-products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
+    .store-products-section {
+        padding: 18px;
+    }
+
+    .store-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .store-product-image {
+        height: 140px;
+    }
+}
+
+@media (max-width: 560px) {
+    .store-products-section {
+        padding: 14px;
+    }
+
+    .store-products-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .store-products-header h2 {
+        font-size: 18px;
+    }
+
+    .store-products-info h3 {
+        font-size: 16px;
+    }
+
+    .store-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .store-product-card {
+        padding: 10px;
+    }
+
+    .store-product-image {
+        height: 110px;
+    }
+
+    .store-product-content h3 {
+        font-size: 12px;
+    }
+
+    .store-product-price {
+        font-size: 18px;
+    }
+
+    .store-product-card .view-product-button {
+        font-size: 11px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .store-products-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .store-product-card,
+    .store-tabs button,
+    .store-product-card .view-product-button {
+        transition: none;
+    }
+}

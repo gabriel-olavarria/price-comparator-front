@@ -1,0 +1,384 @@
+
+/* =========================================
+   CONTENEDOR
+========================================= */
+
+.supermarket-route {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+ 
+/* =========================================
+   LISTA DE RECORRIDOS
+========================================= */
+
+.supermarket-route-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    min-width: 0;
+}
+
+.supermarket-route-step {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    align-items: center;
+    min-width: 0;
+}
+
+/* =========================================
+   NUMERACIÓN VERTICAL
+========================================= */
+
+.supermarket-route-step-indicator {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+}
+
+.supermarket-route-step-indicator::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    bottom: -50%;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #7b00ef;
+}
+
+.supermarket-route-step:first-child
+.supermarket-route-step-indicator::before {
+    top: 50%;
+}
+
+.supermarket-route-step:last-child
+.supermarket-route-step-indicator::before {
+    bottom: 50%;
+}
+
+.supermarket-route-step-number {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #7600e9;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 750;
+}
+
+/* =========================================
+   FILAS DEL RECORRIDO
+========================================= */
+
+.supermarket-route-segment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 3px 10px 3px 16px;
+    background: #ffffff;
+    border: 1px solid #e5dafa;
+    border-radius: 24px;
+}
+
+.supermarket-route-locations {
+    display: grid;
+    grid-template-columns:
+    minmax(0, 1fr)
+    32px
+    minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 450px;
+}
+
+.supermarket-route-location {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    color: #171334;
+}
+
+.supermarket-route-location > span:last-child {
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.supermarket-route-home-icon {
+    flex-shrink: 0;
+    color: #7600e9;
+}
+
+.supermarket-route-arrow {
+    justify-self: center;
+    flex-shrink: 0;
+    color: #7600e9;
+}
+
+/* =========================================
+   DISTANCIA POR TRAMO
+========================================= */
+
+.supermarket-route-distance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 105px;
+    min-height: 34px;
+    box-sizing: border-box;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #f0eaff;
+    color: #171334;
+    font-size: 15px;
+    font-weight: 750;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* =========================================
+   MARCAS DE SUPERMERCADOS
+========================================= */
+
+.supermarket-route-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.supermarket-route-brand-jumbo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #218b36;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.supermarket-route-brand-acuenta {
+    min-width: 48px;
+    height: 23px;
+    box-sizing: border-box;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: #e60012;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.supermarket-route-brand-lider {
+    width: 28px;
+    height: 28px;
+}
+
+.supermarket-route-lider-mark {
+    color: #f5a400;
+    font-size: 30px;
+    line-height: 1;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1200px) {
+    .supermarket-route-heading h3 {
+        font-size: 13px;
+    }
+
+    .supermarket-route-locations {
+        gap: 6px;
+    }
+
+    .supermarket-route-location > span:last-child {
+        font-size: 13px;
+    }
+
+    .supermarket-route-distance {
+        min-width: 85px;
+        font-size: 13px;
+    }
+}
+
+/* =========================================
+   CONTENEDORES ESTRECHOS
+   Solo se reorganiza el encabezado.
+========================================= */
+
+@media (max-width: 1100px) {
+    .supermarket-route-header {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        gap: 12px;
+    }
+    
+}
+
+/* =========================================
+   MÓVIL
+========================================= */
+
+@media (max-width: 700px) {
+    .supermarket-route-header {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .supermarket-route-heading {
+        width: 100%;
+    }
+
+    .supermarket-route-heading h3 {
+        font-size: 10px;
+    }
+    
+
+    .supermarket-route-current-location {
+        padding: 8px 10px;
+    }
+
+    .supermarket-route-step {
+        grid-template-columns: 38px minmax(0, 1fr);
+    }
+
+    .supermarket-route-step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 13px;
+    }
+
+    .supermarket-route-segment {
+        gap: 6px;
+        padding: 5px 8px;
+    }
+
+    .supermarket-route-locations {
+        grid-template-columns:
+      minmax(0, 1fr)
+      18px
+      minmax(0, 1fr);
+        gap: 4px;
+    }
+
+    .supermarket-route-location {
+        gap: 4px;
+    }
+
+    .supermarket-route-location > span:last-child {
+        font-size: 11px;
+    }
+
+    .supermarket-route-brand-acuenta {
+        min-width: 34px;
+        font-size: 8px;
+    }
+
+    .supermarket-route-distance {
+        min-width: 65px;
+        padding: 5px;
+        font-size: 11px;
+    }
+}
+
+/* =========================================
+   MÓVILES PEQUEÑOS
+========================================= */
+
+@media (max-width: 420px) {
+    .supermarket-route-heading-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .supermarket-route-heading h3 {
+        font-size: 14px;
+    }
+
+    .supermarket-route-current-location strong {
+        font-size: 11px;
+    }
+
+    .supermarket-route-change {
+        gap: 4px;
+        padding: 0 8px;
+        font-size: 11px;
+    }
+
+    .supermarket-route-step {
+        grid-template-columns: 32px minmax(0, 1fr);
+    }
+
+    .supermarket-route-step-number {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .supermarket-route-segment {
+        padding: 5px 6px;
+    }
+
+    .supermarket-route-location > span:last-child {
+        font-size: 10px;
+    }
+
+    .supermarket-route-distance {
+        min-width: 55px;
+        font-size: 10px;
+    }
+}
+
+/* =========================================
+   LOCATION
+========================================= */
+
+.supermarket-route-current-location {
+    min-width: 0;
+}
+
+.supermarket-route-current-location > div {
+    min-width: 0;
+}
+
+.supermarket-route-current-location strong {
+    display: block;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+.supermarket-route-status {
+    margin: 10px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.supermarket-route-status--error {
+    color: #dc2626;
+}

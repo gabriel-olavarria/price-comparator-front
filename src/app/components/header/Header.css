@@ -1,0 +1,45 @@
+.site-header {
+    height: 88px;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    gap: 24px
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -.6px;
+    white-space: nowrap
+}
+
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 21px
+}
+
+.profile-button {
+    border: 0;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    background: #faf9fd;
+    display: grid;
+    place-items: center;
+    color: #26243b;
+    box-shadow: var(--shadow)
+}
+
+.profile-button svg {
+    width: 24px
+}
+
+.componentes-navbar{
+    display: flex;
+}

@@ -1,0 +1,352 @@
+/* CartFuelDistance.css — estilos consolidados */
+
+.cart-fuel-distance {
+    --fuel-primary: #7036d9;
+    --fuel-primary-soft: #f2ebff;
+    --fuel-border: #e3d5ff;
+    --fuel-text: #1d193b;
+    --fuel-muted: #8190aa;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    padding: 15px 15px;
+    border-top: 1px solid var(--fuel-border);
+    background: #fff;
+    box-sizing: border-box;
+
+}
+
+/* ENCABEZADO */
+
+
+.cart-fuel-distance-heading-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-fuel-distance-heading-text h3 {
+    margin: 0;
+}
+
+.cart-fuel-distance-heading-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #8190aa;
+
+}
+
+/* PRECIOS DE COMBUSTIBLE */
+
+.cart-fuel-distance-fuels {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cart-fuel-distance-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.cart-fuel-distance-section-heading h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 650;
+    color: var(--fuel-text);
+}
+
+.cart-fuel-distance-section-heading > span {
+    color: var(--fuel-muted);
+    font-size: 12px;
+}
+
+.cart-fuel-distance-prices {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.cart-fuel-distance-price-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 116px;
+    padding: 16px 12px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background: #f5f1fc;
+    color: var(--fuel-text);
+    cursor: pointer;
+    transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+}
+
+.cart-fuel-distance-price-card:hover {
+    border-color: var(--fuel-border);
+    transform: translateY(-2px);
+}
+
+.cart-fuel-distance-price-card-active {
+    border: 2px solid var(--fuel-primary);
+    background: var(--fuel-primary-soft);
+}
+
+.cart-fuel-distance-price-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cart-fuel-distance-price-card strong {
+    font-size: 22px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+.cart-fuel-distance-price-caption {
+    color: var(--fuel-muted);
+    font-size: 11px;
+}
+
+.cart-fuel-distance-price-card-active
+.cart-fuel-distance-price-caption {
+    color: var(--fuel-primary);
+    font-weight: 650;
+
+}
+
+/* COSTO Y VEHÍCULO */
+
+.cart-fuel-distance-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.cart-fuel-distance-cost,
+.cart-fuel-distance-vehicle {
+    display: flex;
+    flex-direction: column;
+    min-height: 156px;
+    padding: 22px;
+    border-radius: 18px;
+    box-sizing: border-box;
+}
+
+.cart-fuel-distance-cost {
+    justify-content: space-between;
+    border: 1px solid var(--fuel-border);
+    background: var(--fuel-primary-soft);
+}
+
+.cart-fuel-distance-cost-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--fuel-primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cart-fuel-distance-cost > strong {
+    color: var(--fuel-primary);
+    font-size: 36px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+.cart-fuel-distance-cost-description {
+    font-size: 12px;
+    color: var(--fuel-muted);
+}
+
+.cart-fuel-distance-vehicle {
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--fuel-border);
+    background: #fff;
+    color: var(--fuel-text);
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.cart-fuel-distance-vehicle:not(:disabled):hover {
+    background: #faf7ff;
+}
+
+.cart-fuel-distance-vehicle:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.cart-fuel-distance-vehicle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--fuel-primary-soft);
+    color: var(--fuel-primary);
+}
+
+.cart-fuel-distance-vehicle strong {
+    font-size: 14px;
+}
+
+.cart-fuel-distance-vehicle > span:last-child {
+    font-size: 12px;
+    color: var(--fuel-muted);
+
+}
+
+/* MÉTRICAS */
+
+.cart-fuel-distance-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 18px 0;
+    border: 1px solid var(--fuel-border);
+    border-radius: 18px;
+}
+
+.cart-fuel-distance-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 22px;
+}
+
+.cart-fuel-distance-metric
++ .cart-fuel-distance-metric {
+    border-left: 1px solid var(--fuel-border);
+}
+
+.cart-fuel-distance-metric-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--fuel-muted);
+    font-size: 13px;
+}
+
+.cart-fuel-distance-metric-label svg {
+    color: var(--fuel-primary);
+    flex-shrink: 0;
+}
+
+.cart-fuel-distance-metric strong {
+    color: var(--fuel-text);
+    font-size: 21px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+}
+
+/* PIE */
+
+.cart-fuel-distance-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    color: var(--fuel-muted);
+    font-size: 12px;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .cart-fuel-distance {
+        padding: 22px;
+    }
+    
+}
+
+@media (max-width: 650px) {
+    .cart-fuel-distance {
+        padding: 18px;
+        gap: 20px;
+    }
+    
+    
+
+    .cart-station-location-address {
+        max-width: 100%;
+    }
+
+    .cart-fuel-distance-prices {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cart-fuel-distance-price-card {
+        min-height: 100px;
+    }
+
+    .cart-fuel-distance-main {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-fuel-distance-cost,
+    .cart-fuel-distance-vehicle {
+        min-height: 130px;
+    }
+
+    .cart-fuel-distance-metrics {
+        grid-template-columns: 1fr;
+        padding: 0 18px;
+    }
+
+    .cart-fuel-distance-metric {
+        padding: 18px 0;
+    }
+
+    .cart-fuel-distance-metric + .cart-fuel-distance-metric {
+        border-left: 0;
+        border-top: 1px solid var(--fuel-border);
+    }
+}
+
+
+
+/* =========================================
+   ESTACIÓN DE REFERENCIA
+   Reutiliza los estilos de SupermarketRoute
+========================================= */
+
+.cart-fuel-distance .cart-station-location {
+    width: 100%;
+    max-width: 290px;
+    min-width: 0;
+    min-height: 48px;
+    margin-left: auto;
+}
+
+.cart-station-location .supermarket-route-current-location > svg {
+    flex-shrink: 0;
+}
+
+.cart-station-location-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.cart-station-location-address {
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+

@@ -1,12 +1,11 @@
+
+import { RouterProvider } from "react-router-dom";
+import { appRouter } from "./router/AppRouter";
+
 import "./App.css";
-import { ProductSearchPage } from "../features/product-search/pages/ProductSearchPage";
 
 function App() {
-  return (
-      <div className="app">
-        <ProductSearchPage />
-      </div>
-  );
+    return <RouterProvider router={appRouter} />;
 }
 
 export default App;

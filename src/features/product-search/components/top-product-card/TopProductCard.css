@@ -1,0 +1,97 @@
+
+/* ==========================================
+   BOTONES VER PRODUCTO
+========================================== */
+
+.view-product-button {
+    margin-top: 5px;
+    padding: 6px 10px;
+
+    background: #ffffff;
+    color: #7036d9;
+
+    border: 1px solid #ded3f7;
+    border-radius: 8px;
+
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease;
+}
+
+.view-product-button:hover:not(:disabled) {
+    background: #f4efff;
+    border-color: #7036d9;
+}
+
+.view-product-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+
+/* ==========================================
+   PRECIOS POR SUPERMERCADO
+========================================== */
+
+.store-price {
+    min-height: 120px;
+}
+
+.price-carousel-track .store-price {
+    min-width: 125px;
+}
+
+
+/* ==========================================
+   SUPERMERCADO MÁS BARATO
+========================================== */
+
+.store-price.cheapest .view-product-button {
+    background: #159239;
+    color: #ffffff;
+    border-color: #159239;
+}
+
+.store-price.cheapest
+.view-product-button:hover:not(:disabled) {
+    background: #10752d;
+    border-color: #10752d;
+}
+
+.store-price.cheapest .view-product-button:disabled {
+    background: #159239;
+    color: #ffffff;
+    border-color: #159239;
+    opacity: 0.5;
+}
+
+
+/* ==========================================
+   CONTENEDOR IZQUIERDO DEL PRODUCTO
+========================================== */
+
+.product-result-card .product-summary {
+    position: relative;
+}
+
+
+/* ==========================================
+   BOTÓN AÑADIR AL CARRITO INTELIGENTE
+========================================== */
+
+.product-result-card
+.product-summary
+.store-product-add-cart {
+    position: absolute;
+    /* Esquina superior izquierda */
+    top: 8px;
+    left: 8px;
+    right: auto;
+    
+}

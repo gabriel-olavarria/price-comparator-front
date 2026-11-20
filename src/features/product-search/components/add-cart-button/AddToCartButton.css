@@ -1,0 +1,127 @@
+
+/* ==========================================
+   BOTÓN AÑADIR AL CARRITO
+========================================== */
+
+.store-product-add-cart {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+
+    padding: 0;
+    margin: 0;
+
+    background: #ffffff;
+    color: #7135e8;
+
+    border: 1px solid #e9e1f5;
+    border-radius: 50%;
+
+    box-shadow: 0 3px 10px rgba(40, 20, 80, 0.08);
+
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+
+    cursor: pointer;
+    z-index: 10;
+
+    transition:
+            background-color 0.2s ease,
+            color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+}
+
+/* ==========================================
+   SIGNO + 
+========================================== */
+
+.store-product-add-cart svg {
+    display: block;
+
+    width: 15px;
+    height: 15px;
+
+    flex-shrink: 0;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+/* ==========================================
+   HOVER
+========================================== */
+
+.store-product-add-cart:hover:not(:disabled) {
+    background: #7135e8;
+    color: #ffffff;
+
+    border-color: #7135e8;
+
+    box-shadow: 0 5px 14px rgba(113, 53, 232, 0.18);
+
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   ACTIVE
+========================================== */
+
+.store-product-add-cart:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* ==========================================
+   FOCUS
+========================================== */
+
+.store-product-add-cart:focus-visible {
+    outline: 2px solid #b794f6;
+    outline-offset: 3px;
+}
+
+/* ==========================================
+   DISABLED
+========================================== */
+
+.store-product-add-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+    .store-product-add-cart {
+        top: 12px;
+        right: 12px;
+
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+    }
+
+    .store-product-add-cart svg {
+        width: 15px;
+        height: 15px;
+    }
+}

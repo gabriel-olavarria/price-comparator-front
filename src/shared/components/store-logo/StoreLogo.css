@@ -1,0 +1,49 @@
+
+.store-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+    box-sizing: border-box;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    background-color: #ffffff;
+}
+
+.store-logo--border {
+    border: 1.5px solid #e9ecef;
+}
+
+.store-logo img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Acuenta mantiene su tamaño original */
+.store-logo--acuenta img {
+    transform: scale(1);
+}
+
+/* Zoom exclusivo para Jumbo */
+.store-logo--jumbo img {
+    width: 38px;
+    height: 40px;
+}
+
+.store-logo svg {
+    color: #7036d9;
+}
+
+
+/* Zoom exclusivo para Lider */
+.store-logo--lider img {
+    width: 38px;
+    height: 40px;
+}

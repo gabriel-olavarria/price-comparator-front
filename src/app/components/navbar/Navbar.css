@@ -1,0 +1,18 @@
+.main-nav {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 20px;
+    
+}
+
+.main-nav a {
+    transition: color .2s
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--purple)
+}

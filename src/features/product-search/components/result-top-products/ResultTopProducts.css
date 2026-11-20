@@ -1,0 +1,330 @@
+
+/* =========================================
+   LISTADO DE PRODUCTOS
+========================================= */
+
+.product-results {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* =========================================
+   TARJETA HORIZONTAL
+========================================= */
+
+.product-result-card {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr) 110px;
+    align-items: center;
+    gap: 18px;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 16px;
+
+    border: 1px solid #eae7f2;
+    border-radius: 15px;
+    background: #ffffff;
+
+    box-shadow: 0 2px 7px rgba(44, 30, 89, 0.04);
+
+    transition:
+            box-shadow 0.2s,
+            transform 0.2s;
+}
+
+.product-result-card:hover {
+    box-shadow: 0 7px 18px rgba(44, 30, 89, 0.09);
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   PRODUCTO: IMAGEN ARRIBA, NOMBRE ABAJO
+========================================= */
+
+.product-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 0;
+    text-align: center;
+}
+
+.product-image {
+    display: block;
+    width: 90px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.product-description {
+    min-width: 0;
+    width: 100%;
+}
+
+.product-description h2 {
+    margin: 0 0 5px;
+    color: #1c1937;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.product-description p {
+    margin: 0;
+    color: #55516d;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* =========================================
+   PRECIOS HORIZONTALES
+========================================= */
+
+.price-comparison {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    width: 100%;
+}
+
+.store-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    flex: 0 0 auto;
+    min-width: 110px;
+    min-height: 82px;
+    padding: 10px 8px;
+
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 13px;
+}
+
+.store-name {
+    color: #4c4765;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.store-price strong {
+    color: #242039;
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* =========================================
+   PRECIO MÁS BARATO FIJO
+========================================= */
+
+.store-price.cheapest {
+    flex: 0 0 135px;
+    background: #e8f9ed;
+}
+
+.store-price.cheapest .store-name {
+    color: #242c2a;
+    font-weight: 700;
+}
+
+.store-price.cheapest strong {
+    color: #159239;
+    font-size: 19px;
+}
+
+.cheapest-label {
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: #cef2d8;
+    color: #159239;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* =========================================
+   CARRUSEL
+========================================= */
+
+.price-carousel-wrapper {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.price-carousel {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+}
+
+.price-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.price-carousel-track {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    min-width: 100%;
+}
+
+.price-carousel-track .store-price {
+    scroll-snap-align: start;
+}
+
+/* Flechas flotantes, sin ocupar columnas */
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+    padding: 0;
+
+    border: 1px solid #eae7f2;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #7036d9;
+
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+
+    box-shadow: 0 2px 8px rgba(44, 30, 89, 0.12);
+}
+
+.carousel-arrow:hover {
+    background: #f4efff;
+}
+
+.carousel-arrow-left {
+    left: 0;
+}
+
+.carousel-arrow-right {
+    right: 0;
+}
+
+/* =========================================
+   BOTÓN VER DETALLE
+========================================= */
+
+.detail-button {
+    justify-self: end;
+    width: 100%;
+    max-width: 110px;
+    min-height: 38px;
+    padding: 8px 10px;
+
+    border: 0;
+    border-radius: 10px;
+    background: #7036d9;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+
+    box-shadow: 0 3px 8px rgba(112, 54, 217, 0.18);
+
+    transition:
+            background 0.2s,
+            transform 0.2s;
+}
+
+.detail-button:hover:not(:disabled) {
+    background: #5a24bd;
+    transform: translateY(-1px);
+}
+
+.detail-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 850px) {
+    .product-result-card {
+        grid-template-columns: 155px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .detail-button {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .store-price.cheapest {
+        flex-basis: 120px;
+    }
+}
+
+@media (max-width: 560px) {
+    .product-result-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .product-summary {
+        grid-column: 1;
+    }
+
+    .price-comparison {
+        grid-column: 1;
+    }
+
+    .detail-button {
+        grid-column: 1;
+        justify-self: stretch;
+        max-width: none;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 90px;
+    }
+
+    .store-price.cheapest {
+        flex-basis: 115px;
+    }
+
+    .store-price {
+        min-width: 100px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .price-carousel {
+        scroll-behavior: auto;
+    }
+}

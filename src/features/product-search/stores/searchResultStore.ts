@@ -1,10 +1,8 @@
+
 import { create } from "zustand";
 import type { SearchResultStore } from "../models/SearchResponse.ts";
 
- 
-
-export const useSearchResultStore = 
-    create<SearchResultStore>((set) => ({
+export const useSearchResultStore = create<SearchResultStore>((set) => ({
     result: null,
     search: null,
     metrics: null,
@@ -18,8 +16,11 @@ export const useSearchResultStore =
             metrics: result?.metrics ?? null,
         }),
 
-    setIsLoading: (isLoading) => set({ isLoading }),
-    setError: (error) => set({ error }),
+    setIsLoading: (isLoading) =>
+        set({ isLoading }),
+
+    setError: (error) =>
+        set({ error }),
 
     clearSearch: () =>
         set({

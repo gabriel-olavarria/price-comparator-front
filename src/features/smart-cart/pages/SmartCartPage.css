@@ -1,0 +1,471 @@
+
+/* =========================================
+   SMART CART PAGE
+========================================= */
+
+.smart-cart-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    padding: 36px 24px 64px;
+    background: #faf9fd;
+    color: #17142f;
+    box-sizing: border-box;
+}
+
+.smart-cart-page *,
+.smart-cart-page *::before,
+.smart-cart-page *::after {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL
+========================================= */
+
+.smart-cart-container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 36px;
+    background: #ffffff;
+    border: 1px solid #eeebf4;
+    border-radius: 20px;
+    box-shadow: 0 8px 28px rgba(38, 24, 78, 0.06);
+}
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.smart-cart-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.smart-cart-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    color: #6728d8;
+}
+
+.smart-cart-header-icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.smart-cart-header-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.smart-cart-header-text h1 {
+    margin: 0 0 8px;
+    color: #17142f;
+    font-size: 28px;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.smart-cart-header-text p {
+    margin: 0;
+    color: #55516a;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   CONTENIDO DE PESTAÑAS
+========================================= */
+
+.smart-cart-tab-content {
+    padding-top: 8px;
+}
+
+/* =========================================
+   CARRITO VACÍO
+========================================= */
+
+.smart-cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-height: 320px;
+    padding: 40px 24px;
+    border: 1px dashed #ded6ee;
+    border-radius: 14px;
+    background: #fcfbff;
+    text-align: center;
+}
+
+.smart-cart-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: #f1eafd;
+    color: #6728d8;
+}
+
+.smart-cart-empty-icon svg {
+    width: 34px;
+    height: 34px;
+}
+
+.smart-cart-empty h2 {
+    margin: 0 0 10px;
+    color: #211a38;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.smart-cart-empty p {
+    max-width: 420px;
+    margin: 0 0 26px;
+    color: #747087;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   BOTÓN AGREGAR PRODUCTOS
+========================================= */
+
+.smart-cart-add-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 48px;
+    padding: 8px 22px 8px 10px;
+
+    border: 1px solid #6728d8;
+    border-radius: 12px;
+
+    background: #6728d8;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.4;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(103, 40, 216, 0.16);
+
+    transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+}
+
+.smart-cart-add-more:hover {
+    background: #5520ba;
+    border-color: #5520ba;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(103, 40, 216, 0.24);
+    transform: translateY(-1px);
+}
+
+.smart-cart-add-more:active {
+    background: #47199f;
+    border-color: #47199f;
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(103, 40, 216, 0.15);
+}
+
+.smart-cart-add-more:focus-visible {
+    outline: 3px solid rgba(103, 40, 216, 0.3);
+    outline-offset: 3px;
+}
+
+.smart-cart-add-more:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* =========================================
+   ÍCONO + DEL BOTÓN
+========================================= */
+
+.smart-cart-add-icon {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1;
+
+    padding-bottom: 2px;
+}
+.smart-cart-add-icon svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+.smart-cart-add-more:hover .smart-cart-add-icon {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* =========================================
+   OPTIMIZACIÓN Y RESUMEN
+========================================= */
+
+.smart-cart-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    min-height: 280px;
+    margin-top: 8px;
+    padding: 36px 24px;
+
+    border: 1px solid #e9e5f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+    text-align: center;
+}
+
+.smart-cart-placeholder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 14px;
+    background: #f2ebff;
+    color: #6728d8;
+}
+
+.smart-cart-placeholder-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.smart-cart-placeholder h2 {
+    margin: 0;
+    color: #211a38;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.smart-cart-placeholder p {
+    max-width: 520px;
+    margin: 0;
+    color: #747087;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =========================================
+   TARJETAS DEL RESUMEN
+========================================= */
+
+.smart-cart-summary-count {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    width: 100%;
+    max-width: 420px;
+
+    padding: 16px 20px;
+
+    border: 1px solid #eeeaf5;
+    border-radius: 10px;
+
+    background: #ffffff;
+    text-align: left;
+}
+
+.smart-cart-summary-count span {
+    color: #625d73;
+    font-size: 14px;
+}
+
+.smart-cart-summary-count strong {
+    color: #6728d8;
+    font-size: 20px;
+    font-weight: 750;
+}
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .smart-cart-page {
+        min-height: calc(100vh - 64px);
+        padding: 20px 12px 40px;
+    }
+
+    .smart-cart-container {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .smart-cart-header {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .smart-cart-header-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .smart-cart-header-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .smart-cart-header-text h1 {
+        font-size: 23px;
+    }
+
+    .smart-cart-empty {
+        min-height: 300px;
+        padding: 32px 18px;
+    }
+
+    .smart-cart-placeholder {
+        padding: 32px 18px;
+    }
+}
+
+/* =========================================
+   RESPONSIVE MÓVIL
+========================================= */
+
+@media (max-width: 420px) {
+
+    .smart-cart-page {
+        padding: 12px 8px 32px;
+    }
+
+    .smart-cart-container {
+        padding: 20px 12px;
+        border-radius: 14px;
+    }
+
+    .smart-cart-header {
+        gap: 10px;
+    }
+
+    .smart-cart-header-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .smart-cart-header-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .smart-cart-header-text h1 {
+        font-size: 20px;
+    }
+
+    .smart-cart-header-text p {
+        font-size: 13px;
+    }
+
+    .smart-cart-empty {
+        min-height: 280px;
+        padding: 28px 14px;
+    }
+
+    .smart-cart-empty h2 {
+        font-size: 19px;
+    }
+
+    .smart-cart-empty p {
+        font-size: 13px;
+    }
+
+    .smart-cart-add-more {
+        width: 100%;
+        max-width: 260px;
+        min-height: 46px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .smart-cart-placeholder {
+        padding: 28px 14px;
+    }
+
+    .smart-cart-placeholder h2 {
+        font-size: 19px;
+    }
+
+    .smart-cart-summary-count {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .smart-cart-summary-count span {
+        font-size: 13px;
+    }
+
+    .smart-cart-summary-count strong {
+        font-size: 18px;
+    }
+}
+
+/* =========================================
+   ACCESIBILIDAD
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .smart-cart-add-more {
+        transition: none;
+    }
+
+    .smart-cart-add-more:hover,
+    .smart-cart-add-more:active {
+        transform: none;
+    }
+}

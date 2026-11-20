@@ -1,15 +1,7 @@
 
-import {
-    Card,
-    RingProgress,
-    Stack,
-    Text,
-    Tooltip,
-} from "@mantine/core";
-
+import { Card, RingProgress, Stack, Text, Tooltip, } from "@mantine/core";
 import {ChartPie} from "lucide-react";
 import { useState } from "react";
-
 import { useSearchResultStore } from "../../../../stores/searchResultStore.ts";
 import "../styles/QuantitiesChartByMarket.css";
 
@@ -26,7 +18,7 @@ const STORE_COLORS: Record<string, string> = {
     Unimarc: "#FA5252",
     Tottus: "#40C057",
     SantaIsabel: "#7950F2",
-    SantalIsabel: "#7950F2",
+    ACuenta: "#7950F2",
 };
 
 const FALLBACK_COLORS = [

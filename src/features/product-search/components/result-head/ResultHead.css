@@ -1,0 +1,99 @@
+
+.results-heading {
+    margin-top: 24px;
+}
+
+.results-heading h1 {
+    margin: 0 0 7px;
+    color: #171431;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+.results-heading p {
+    margin: 0;
+    font-size: 14px;
+    color: #77718d;
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.results-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+    margin-bottom: 30px;
+}
+
+.store-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-chip {
+    min-height: 36px;
+    padding: 8px 14px;
+    border: 1px solid #eeeaf5;
+    border-radius: 22px;
+    background: #ffffff;
+    color: #29243e;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(44, 30, 89, 0.04);
+    transition: background 0.2s, color 0.2s;
+}
+
+.filter-chip:hover {
+    border-color: #c8b2f2;
+    color: #7036d9;
+}
+
+.filter-chip.active {
+    background: #7036d9;
+    border-color: #7036d9;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(112, 54, 217, 0.2);
+}
+
+/* =========================================
+   ORDENAMIENTO
+========================================= */
+
+.sort-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 36px;
+    padding: 0 10px;
+    border: 1px solid #eeeaf5;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(44, 30, 89, 0.04);
+    white-space: nowrap;
+}
+
+.sort-control span {
+    font-size: 12px;
+    color: #68647e;
+}
+
+.sort-control select {
+    max-width: 120px;
+    padding: 7px 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #29243e;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
