@@ -15,6 +15,7 @@ export function useNearbySupermarkets() {
   const supermarketsSegments = useSupermarketStore(
     (state) => state.supermarketsSegments,
   );
+  const nearestByStore = useSupermarketStore((state) => state.nearestByStore);
   const loadingSupermarkets = useSupermarketStore((state) => state.loadingSupermarkets,);
   const errorSupermarkets = useSupermarketStore((state) => state.errorSupermarkets,);
   const load = useCallback(
@@ -43,6 +44,7 @@ export function useNearbySupermarkets() {
 
         useSupermarketStore.setState({
           supermarketsSegments: response.routeResult,
+          nearestByStore: response.nearestByStore,
           loadingSupermarkets: false,
           errorSupermarkets: null,
         });
@@ -74,6 +76,7 @@ export function useNearbySupermarkets() {
   return {
     load,
     supermarketsSegments,
+    nearestByStore,
     loadingSupermarkets,
     errorSupermarkets,
   };

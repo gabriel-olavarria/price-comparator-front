@@ -2,15 +2,19 @@ import { create } from "zustand";
 import { persist, subscribeWithSelector } from "zustand/middleware";
 
 import type {
-  RouteResult,
+    NearbySupermarketsResult, RouteResult,
 } from "../models/supermarketLocation.models";
 
 interface SupermarketSegmentsStore {
   supermarketsSegments: RouteResult | null;
+  nearestByStore: NearbySupermarketsResult[];
   loadingSupermarkets: boolean;
   errorSupermarkets: string | null;
 
-  setSupermarkets: (supermarketsSegments: RouteResult | null) => void;
+  setSupermarkets: (
+    supermarketsSegments: RouteResult | null,
+    nearestByStore: NearbySupermarketsResult[],
+  ) => void;
   setLoadingSupermarkets: (loading: boolean) => void;
   setErrorSupermarkets: (error: string | null) => void;
 }
@@ -20,11 +24,12 @@ export const useSupermarketStore = create<SupermarketSegmentsStore>()(
     persist(
       (set) => ({
         supermarketsSegments: null,
+        nearestByStore: [],
         loadingSupermarkets: false,
         errorSupermarkets: null,
 
-        setSupermarkets: (supermarketsSegments) =>
-          set({ supermarketsSegments }),
+        setSupermarkets: (supermarketsSegments, nearestByStore) =>
+          set({ supermarketsSegments, nearestByStore }),
 
         setLoadingSupermarkets: (loadingSupermarkets) =>
           set({ loadingSupermarkets }),
@@ -33,9 +38,10 @@ export const useSupermarketStore = create<SupermarketSegmentsStore>()(
       }),
       {
         name: "price-comparator-supermarkets",
-        version: 1,
+        version: 2,
         partialize: (state) => ({
           supermarketsSegments: state.supermarketsSegments,
+          nearestByStore: state.nearestByStore,
         }),
       },
     ),
