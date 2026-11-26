@@ -10,6 +10,7 @@ interface FuelCalculationStore {
   setData: (data: FuelCalulateResponse) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  clear: () => void;
 }
 
 export const useFuelCalculationStore = create<FuelCalculationStore>()(
@@ -29,7 +30,13 @@ export const useFuelCalculationStore = create<FuelCalculationStore>()(
       setLoading: (loading) => set({ loading }),
 
       setError: (error) => set({ error }),
-      
+
+      clear: () =>
+        set({
+          data: null,
+          loading: false,
+          error: null,
+        }),
     }),
     {
       name: "price-comparator-fuel-calculation-v1",

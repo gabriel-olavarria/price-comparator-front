@@ -19,20 +19,17 @@ export function useSupermarketRoute() {
   //Store Supermarkets Cart
   const loadingSupermarkets = useSupermarketStore((state) => state.loadingSupermarkets,);
   const errorSupermarkets = useSupermarketStore((state) => state.errorSupermarkets,);
-  const setLoadingSupermarkets = useSupermarketStore((state) => state.setLoadingSupermarkets,);
 
   const [locationModalOpened, setLocationModalOpened] = useState(false);
 
   const handleConfirmLocation = (location: SelectedLocation) => {
     setLocationUser(location);
     setLocationModalOpened(false);
-    setLoadingSupermarkets(true);
   };
  
   return {
     loadingSupermarkets,
     errorSupermarkets,
-    location,
     locationModalOpened,
     locationLabel: locationUser?.address ?? "Sin configurar",
     formatDistance: (distanceKm: number) => `${distanceKm.toLocaleString("es-CL", { maximumFractionDigits: 2 })} km`,

@@ -12,6 +12,28 @@ import type {
 import { useVehicleStore } from "../../stores/vehicleStore.ts";
 import { useLocationStore } from "../../stores/locationStore.ts";
 import { useSupermarketStore } from "../../stores/supermarketsStore.ts";
+import { useFuelCalculationStore } from "../../stores/fuelCalculationStore.ts";
+
+function resolveSelectedFuel(
+  combustibles: Record<string, StationFuelPrice> | undefined,
+  selectedFuelKey: string | null,
+): StationFuelPrice | null {
+  if (!combustibles) {
+    return null;
+  }
+
+  if (selectedFuelKey) {
+    const selected = Object.values(combustibles).find(
+      (fuel) => fuel.combustible === selectedFuelKey,
+    );
+
+    if (selected) {
+      return selected;
+    }
+  }
+
+  return combustibles["95"] ?? Object.values(combustibles)[0] ?? null;
+}
 
 export function useFuelCalculate() {
   const routeSegments = useSupermarketStore(
@@ -21,9 +43,8 @@ export function useFuelCalculate() {
   // Ubicación seleccionada
   const locationUser = useLocationStore((state) => state.locationUser);
 
-  // Combustible seleccionado
-  const [selectedFuelType, setSelectedFuelType] =
-    useState<StationFuelPrice | null>(null);
+  // Clave del combustible elegido. El objeto se deriva de la estación actual.
+  const [selectedFuelKey, setSelectedFuelKey] = useState<string | null>(null);
 
   // Auto seleccionado
   const vehicleUser = useVehicleStore((state) => state.vehicleUser);
@@ -43,14 +64,9 @@ export function useFuelCalculate() {
   // Controlador de peticiones
   const controllerRef = useRef<AbortController | null>(null);
 
-  type FuelCalculationTrigger = "vehicle" | "segments";
-
-  // Ejecutar cálculo de combustible
-  const executeLoad = useCallback(
-    (trigger: FuelCalculationTrigger) => {
-      console.log("Origen del cálculo:", trigger);
-
+  const executeLoad = useCallback(() => {
       controllerRef.current?.abort();
+      controllerRef.current = null;
 
       const currentLocation = useLocationStore.getState().locationUser;
 
@@ -62,30 +78,31 @@ export function useFuelCalculate() {
         errorSupermarkets,
       } = useSupermarketStore.getState();
 
+      const efficiency = currentVehicle?.efficiency;
+      const hasUsableEfficiency =
+        typeof efficiency === "number" &&
+        Number.isFinite(efficiency) &&
+        efficiency > 0;
+
+      if (currentVehicle && !hasUsableEfficiency) {
+        useFuelCalculationStore.getState().clear();
+        return;
+      }
+
       if (
         !currentLocation ||
         !currentVehicle ||
         !currentSegments ||
         loadingSupermarkets ||
-        errorSupermarkets ||
-        typeof currentVehicle.efficiency !== "number" ||
-        !Number.isFinite(currentVehicle.efficiency) ||
-        currentVehicle.efficiency <= 0
+        errorSupermarkets
       ) {
+        useFuelCalculationStore.getState().setLoading(false);
         return;
       }
 
       const controller = new AbortController();
 
       controllerRef.current = controller;
-
-      console.log("Calculando combustible:", {
-        trigger,
-        location: currentLocation,
-        vehicle: currentVehicle,
-        segments: currentSegments,
-        totalDistanceKm: currentSegments.totalDistanceKm,
-      });
 
       void load(
         {
@@ -103,11 +120,8 @@ export function useFuelCalculate() {
   useEffect(() => {
     return useVehicleStore.subscribe(
       (state) => state.vehicleUser?.efficiency,
-      (current, previous) => {
-        console.log("Nuevo rendimiento:", current);
-        console.log("Anterior rendimiento:", previous);
-
-        executeLoad("vehicle");
+      () => {
+        executeLoad();
       },
       {
         fireImmediately: false,
@@ -126,17 +140,13 @@ export function useFuelCalculate() {
       (current, previous) => {
         if (current.loading || !current.segments || current.error) {
           controllerRef.current?.abort();
+          controllerRef.current = null;
+          useFuelCalculationStore.getState().setLoading(false);
           return;
         }
 
-        const segmentsChanged = current.segments !== previous.segments;
-
-        const loadingFinished = previous.loading && !current.loading;
-
-        const errorRecovered = !!previous.error && !current.error;
-
-        if (segmentsChanged || loadingFinished || errorRecovered) {
-          executeLoad("segments");
+        if (current.segments !== previous.segments) {
+          executeLoad();
         }
       },
       {
@@ -151,6 +161,8 @@ export function useFuelCalculate() {
     return () => {
       unsubscribeSegments();
       controllerRef.current?.abort();
+      controllerRef.current = null;
+      useFuelCalculationStore.getState().setLoading(false);
     };
   }, [executeLoad]);
 
@@ -158,32 +170,18 @@ export function useFuelCalculate() {
   const station: CneFuelStation | null = fuelCalculate?.station ?? null;
 
   const fuels = Object.entries(station?.combustibles ?? {});
+  const selectedFuelType = resolveSelectedFuel(
+    station?.combustibles,
+    selectedFuelKey,
+  );
 
-  // Seleccionar combustible por defecto y actualizar sus valores
-  useEffect(() => {
-    const combustibles = station?.combustibles;
-
-    if (!combustibles) {
-      setSelectedFuelType(null);
+  const setSelectedFuelType = (fuel: StationFuelPrice) => {
+    if (fuel.combustible == null) {
       return;
     }
 
-    setSelectedFuelType((previous) => {
-      // Mantener el combustible seleccionado con los precios actualizados
-      if (previous?.combustible) {
-        const updatedFuel = Object.values(combustibles).find(
-          (fuel) => fuel.combustible === previous.combustible,
-        );
-
-        if (updatedFuel) {
-          return updatedFuel;
-        }
-      }
-
-      // Seleccionar gasolina 95 por defecto
-      return combustibles["95"] ?? Object.values(combustibles)[0] ?? null;
-    });
-  }, [station]);
+    setSelectedFuelKey(fuel.combustible);
+  };
 
   // Métricas del recorrido
   const distanceKm = routeSegments?.totalDistanceKm ?? null;
@@ -205,7 +203,11 @@ export function useFuelCalculate() {
 
   const stationName = station?.distribuidor?.marca ?? "Sin estación disponible";
   const stationAddress = stationLocation.address;
-  const stationDistance = station?.distanceToUserKm ?? 0;
+  const stationDistance =
+    typeof station?.distanceToUserKm === "number" &&
+    Number.isFinite(station.distanceToUserKm)
+      ? station.distanceToUserKm
+      : null;
 
   // URL de OpenStreetMap
   const stationLatitude = station?.ubicacion?.latitud ?? null;
@@ -244,26 +246,6 @@ export function useFuelCalculate() {
     handleCloseVehicleModal();
   };
 
-  useEffect(() => {
-    console.count("Cambió la referencia de load");
-  }, [load]);
-
-  useEffect(() => {
-    console.count("Cambió la referencia de executeLoad");
-  }, [executeLoad]);
-
-  useEffect(() => {
-    console.count("Cambió la estación");
-  }, [station]);
-
-  useEffect(() => {
-    console.count("Cambió el combustible seleccionado");
-  }, [selectedFuelType]);
-
-  useEffect(() => {
-    console.log("Combustible seleccionado:", selectedFuelType);
-  }, [selectedFuelType]);
-  
   return {
     locationUser,
     fuelCalculate,

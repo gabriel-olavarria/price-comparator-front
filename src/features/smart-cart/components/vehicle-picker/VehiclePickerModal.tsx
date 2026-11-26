@@ -75,11 +75,12 @@ export default function VehiclePickerModal({
     isValid,
     handleVehicleTypeChange,
     handleBrandChange,
-    setSelectedModel,
     setEfficiency,
     handleConfirm,
     loadingVehicle,
+    errorVehicle,
     handleLabelChange,
+    handleModelChange,
   } = useVehiclePicker(opened, onConfirm);
 
   const handleSave = () => {
@@ -130,7 +131,7 @@ export default function VehiclePickerModal({
           </button>
         </header>
 
-        {loadingCatalog || loadingVehicle ? (
+        {loadingCatalog ? (
           <Center mih={300}>
             <Loader size={36} color="violet" type="dots" />
           </Center>
@@ -205,7 +206,7 @@ export default function VehiclePickerModal({
                         placeholder={!selectedBrand ? "Primero selecciona una marca" : "Seleccionar modelo"}
                         data={catalogModels}
                         value={selectedModel}
-                        onChange={setSelectedModel}
+                        onChange={handleModelChange}
                         disabled={!selectedBrand || loadingCatalog}
                         searchable
                         nothingFoundMessage="No se encontraron modelos"
@@ -224,6 +225,11 @@ export default function VehiclePickerModal({
                       radius="md"
                       comboboxProps={{ withinPortal: true, zIndex: 1000, }}
                     />
+                    {errorVehicle && (
+                      <Alert color="red" variant="light" icon={<AlertCircle size={18} />} mt="md">
+                        {errorVehicle}
+                      </Alert>
+                    )}
                   </section>
 
                   {/* ========================================
@@ -241,6 +247,8 @@ export default function VehiclePickerModal({
                         min={0.1}
                         decimalScale={2}
                         radius="md"
+                        disabled={loadingVehicle}
+                        rightSection={loadingVehicle ? <Loader size="xs" /> : null}
                       />
                     </div>
                   </section>
@@ -253,7 +261,7 @@ export default function VehiclePickerModal({
                 Cancelar
               </Button>
 
-              <Button color="violet" radius="md" leftSection={<Check size={17} />} disabled={!isValid} onClick={handleSave}>
+              <Button color="violet" radius="md" leftSection={<Check size={17} />} disabled={!isValid || loadingVehicle} loading={loadingVehicle} onClick={handleSave}>
                 Confirmar vehículo
               </Button>
             </footer>

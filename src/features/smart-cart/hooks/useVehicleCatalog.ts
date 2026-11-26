@@ -2,7 +2,8 @@ import { useCallback } from "react";
 
 import { getVehicleCatalog } from "../services/fuel.service.ts";
 import { useVehicleCatalogStore } from "../stores/vehicleCatalogStore.ts";
- 
+
+let catalogRequestId = 0;
 
 export function useVehicleCatalog() {
   const catalog = useVehicleCatalogStore((state) => state.catalog);
@@ -20,28 +21,36 @@ export function useVehicleCatalog() {
 
       // Evitar consultar nuevamente si ya existe el catálogo.
       if (state.catalog !== null) {
+        if (state.loading) {
+          setLoadingCatalog(false);
+        }
         return;
       }
+
+      const requestId = ++catalogRequestId;
 
       setLoadingCatalog(true);
       setErrorCatalog(null);
 
       try {
         const response = await getVehicleCatalog(signal);
-        console.log(response);
-        if (!signal.aborted) {
-          setCatalog(response);
+        if (signal.aborted || requestId !== catalogRequestId) {
+          return;
         }
+
+        setCatalog(response);
       } catch (error) {
-        if (!signal.aborted) {
-          setErrorCatalog(
-            error instanceof Error
-              ? error.message
-              : "Error al obtener el catálogo vehicular.",
-          );
+        if (signal.aborted || requestId !== catalogRequestId) {
+          return;
         }
+
+        setErrorCatalog(
+          error instanceof Error
+            ? error.message
+            : "Error al obtener el catálogo vehicular.",
+        );
       } finally {
-        if (!signal.aborted) {
+        if (requestId === catalogRequestId) {
           setLoadingCatalog(false);
         }
       }

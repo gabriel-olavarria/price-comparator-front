@@ -8,7 +8,6 @@ import LocationMap from "./LocationMap";
 
 import { useUserLocation } from "../../hooks/useUserLocation";
 import { reverseGeocode } from "../../services/geocoding.service.ts";
-import { useLocationStore } from "../../stores/locationStore.ts";
 
 import type {
   Coordinates,
@@ -43,9 +42,9 @@ export default function LocationPickerModal({
     getLocation,
   } = useUserLocation();
 
-  const setLocationUser = useLocationStore((state) => state.setLocationUser);
-
-  const [selected, setSelected] = useState<SelectedLocation | null>(null);
+  const [selected, setSelected] = useState<SelectedLocation | null>(
+    initialLocation ?? null,
+  );
 
   const [resolvingAddress, setResolvingAddress] = useState(false);
 
@@ -54,6 +53,10 @@ export default function LocationPickerModal({
   const wasOpened = useRef(false);
   const controller = useRef<AbortController | null>(null);
   const requestId = useRef(0);
+  const initialLocationRef = useRef(initialLocation);
+  const searchValueRef = useRef(initialLocation?.address ?? "");
+
+  initialLocationRef.current = initialLocation;
 
   const resolveLocation = useCallback(async (coordinates: Coordinates) => {
     controller.current?.abort();
@@ -108,10 +111,14 @@ export default function LocationPickerModal({
 
   useEffect(() => {
     if (opened && !wasOpened.current) {
-      setSelected(initialLocation ?? null);
+      const startingLocation = initialLocationRef.current ?? null;
+
+      setSelected(startingLocation);
       setAddressError(null);
 
-      getLocation();
+      if (!startingLocation) {
+        getLocation();
+      }
     }
 
     if (!opened) {
@@ -122,13 +129,18 @@ export default function LocationPickerModal({
     }
 
     wasOpened.current = opened;
-  }, [opened, initialLocation, getLocation]);
+  }, [opened, getLocation]);
 
   useEffect(() => {
-    if (opened && userLocation && !initialLocation && !selected) {
+    if (
+      opened &&
+      userLocation &&
+      !initialLocationRef.current &&
+      !selected
+    ) {
       void resolveLocation(userLocation);
     }
-  }, [opened, userLocation, initialLocation, selected, resolveLocation]);
+  }, [opened, userLocation, selected, resolveLocation]);
 
   useEffect(() => {
     return () => {
@@ -170,16 +182,20 @@ export default function LocationPickerModal({
       return;
     }
 
-    setLocationUser(selected);
     onConfirm(selected);
     onClose();
   };
 
-  const searchValue =
-    selected?.address === "Obteniendo dirección..." ||
-    selected?.address === "Dirección no disponible"
-      ? ""
-      : (selected?.address ?? "");
+  const address = selected?.address ?? "";
+  const addressIsPending =
+    address === "Obteniendo dirección..." ||
+    address === "Dirección no disponible";
+
+  if (!addressIsPending && searchValueRef.current !== address) {
+    searchValueRef.current = address;
+  }
+
+  const searchValue = addressIsPending ? searchValueRef.current : address;
 
   return (
     <Modal

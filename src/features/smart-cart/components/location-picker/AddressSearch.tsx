@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, Loader, TextInput } from "@mantine/core";
 import { MapPin, Search } from "lucide-react";
 
@@ -13,12 +13,17 @@ interface Props {
 export default function AddressSearch({ value = "", onSelect }: Props) {
   const [query, setQuery] = useState(value);
   const [selectedQuery, setSelectedQuery] = useState<string | null>(value);
+  const isEditingRef = useRef(false);
 
   const activeQuery = selectedQuery === query ? "" : query;
 
   const { suggestions, loading, error } = useAddressAutocomplete(activeQuery);
 
   useEffect(() => {
+    if (isEditingRef.current) {
+      return;
+    }
+
     setQuery(value);
     setSelectedQuery(value);
   }, [value]);
@@ -33,6 +38,7 @@ export default function AddressSearch({ value = "", onSelect }: Props) {
 
     const displayName = suggestion.formatted.trim() || query;
 
+    isEditingRef.current = false;
     setSelectedQuery(displayName);
     setQuery(displayName);
 
@@ -50,6 +56,7 @@ export default function AddressSearch({ value = "", onSelect }: Props) {
           rightSection={loading ? <Loader size="xs" /> : null}
           value={query}
           onChange={(event) => {
+            isEditingRef.current = true;
             setSelectedQuery(null);
             setQuery(event.currentTarget.value);
           }}

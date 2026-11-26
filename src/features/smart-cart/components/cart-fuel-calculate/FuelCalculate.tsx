@@ -146,12 +146,15 @@ export function FuelCalculate (props: FuelCalculateProps) {
         {(locationUser == null || vehicleUser == null) && (
           <FuelCalculateEmpty onOpened={handleOpenVehicleModal} />
         )}
-        {loadingCalculate && (
+        {loadingCalculate && locationUser != null && vehicleUser != null && (
           <Center mih={300}>
             <Loader size={36} color="violet" type="dots" />
           </Center>
         )}
-        {!loadingCalculate && fuelCalculate !== null && (
+        {!loadingCalculate &&
+          locationUser != null &&
+          vehicleUser != null &&
+          fuelCalculate !== null && (
           <>
             {/* PRECIOS DE COMBUSTIBLES */}
             <div className="cart-fuel-distance-fuels">
@@ -162,7 +165,9 @@ export function FuelCalculate (props: FuelCalculateProps) {
 
               <div className="cart-fuel-distance-prices">
                 {fuels.map(([type, fuel]) => {
-                  const isSelected = selectedFuelType?.combustible === type;
+                  const isSelected =
+                    selectedFuelType?.combustible != null &&
+                    selectedFuelType.combustible === fuel.combustible;
 
                   return (
                     <button
@@ -176,12 +181,7 @@ export function FuelCalculate (props: FuelCalculateProps) {
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      onClick={() => {
-                        console.log("Combustible seleccionado:", fuel);
-                        console.log("Precio distancia:", fuel.precioDistancia);
-
-                        setSelectedFuelType(fuel);
-                      }}
+                      onClick={() => setSelectedFuelType(fuel)}
                       aria-pressed={isSelected}
                     >
                       <span className="cart-fuel-distance-price-label">

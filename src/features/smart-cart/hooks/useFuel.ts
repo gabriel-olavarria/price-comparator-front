@@ -1,4 +1,4 @@
-import { useCallback} from "react";
+import { useCallback } from "react";
 import { calculate } from "../services/fuel.service";
 import { toFuelCalculationRequest } from "../mappers/fuelCalculation.mapper";
 import { useFuelCalculationStore } from "../stores/fuelCalculationStore";
@@ -13,6 +13,8 @@ interface LoadParams {
   currentVehicle: VehicleConfiguration;
   routeSegments: NearbySupermarketsResponse["routeResult"];
 }
+
+let fuelRequestId = 0;
  
 
 export function useFuel() {
@@ -29,6 +31,8 @@ export function useFuel() {
       { currentLocation, routeSegments, currentVehicle }: LoadParams,
       signal: AbortSignal,
     ): Promise<void> => {
+      const requestId = ++fuelRequestId;
+
       setLoadingFuel(true);
       const request = toFuelCalculationRequest({
         currentLocation,
@@ -37,23 +41,25 @@ export function useFuel() {
       });
 
       try {
-        console.log("reques useFuel",request);
         const response = await calculate(request, signal);
-        console.log("response useFuel", response);
 
-        if (!signal.aborted) {
-          setFuelCalculate(response);
+        if (signal.aborted || requestId !== fuelRequestId) {
+          return;
         }
+
+        setFuelCalculate(response);
       } catch (error) {
-        if (!signal.aborted) {
-          setErrorFuel(
-            error instanceof Error
-              ? error.message
-              : "Error al calcular combustible",
-          );
+        if (signal.aborted || requestId !== fuelRequestId) {
+          return;
         }
+
+        setErrorFuel(
+          error instanceof Error
+            ? error.message
+            : "Error al calcular combustible",
+        );
       } finally {
-        if (!signal.aborted) {
+        if (requestId === fuelRequestId) {
           setLoadingFuel(false);
         }
       }

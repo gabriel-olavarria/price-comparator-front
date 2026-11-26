@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { getVehicleConsumption } from "../services/fuel.service.ts";
 
@@ -62,6 +62,12 @@ export function useVehicleCharacteristics() {
     },
     [],
   );
+
+  useEffect(() => {
+    return () => {
+      controllerRef.current?.abort();
+    };
+  }, []);
 
   const resetVehicle = useCallback(() => {
     controllerRef.current?.abort();

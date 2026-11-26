@@ -9,50 +9,65 @@ interface UseNearbySupermarketsProps {
   storeKeys: string[];
 }
 
+let supermarketRequestId = 0;
+
 export function useNearbySupermarkets() {
   const supermarketsSegments = useSupermarketStore(
     (state) => state.supermarketsSegments,
   );
   const loadingSupermarkets = useSupermarketStore((state) => state.loadingSupermarkets,);
   const errorSupermarkets = useSupermarketStore((state) => state.errorSupermarkets,);
-  const setLoadingSupermarkets = useSupermarketStore((state) => state.setLoadingSupermarkets,);
-  const setErrorSupermarkets = useSupermarketStore((state) => state.setErrorSupermarkets,);
-  const setSupermarkets = useSupermarketStore((state) => state.setSupermarkets);
-  
   const load = useCallback(
     async (
       { locationUser, storeKeys }: UseNearbySupermarketsProps,
       signal: AbortSignal,
     ): Promise<void> => {
+      const requestId = ++supermarketRequestId;
       const request = toNearbySupermarketsRequest({
         latitude: locationUser.latitude,
         longitude: locationUser.longitude,
         storeKeys,
       });
 
-      setErrorSupermarkets(null);
+      useSupermarketStore.setState({
+        loadingSupermarkets: true,
+        errorSupermarkets: null,
+      });
 
       try {
         const response = await fetchNearbySupermarkets(request, signal);
-        console.log("response supermarkets",response);
-        if (!signal.aborted) {
-          setSupermarkets(response.routeResult);
+
+        if (signal.aborted || requestId !== supermarketRequestId) {
+          return;
         }
+
+        useSupermarketStore.setState({
+          supermarketsSegments: response.routeResult,
+          loadingSupermarkets: false,
+          errorSupermarkets: null,
+        });
       } catch (error) {
-        if (!signal.aborted) {
-          setErrorSupermarkets(
+        if (signal.aborted || requestId !== supermarketRequestId) {
+          return;
+        }
+
+        useSupermarketStore.setState({
+          errorSupermarkets:
             error instanceof Error
               ? error.message
               : "Error al obtener la ruta de los supermercados.",
-          );
-        }
+          loadingSupermarkets: false,
+        });
       } finally {
-        if (!signal.aborted) {
-          setLoadingSupermarkets(false);
+        if (
+          requestId === supermarketRequestId &&
+          useSupermarketStore.getState().loadingSupermarkets
+        ) {
+          useSupermarketStore.setState({ loadingSupermarkets: false });
         }
       }
     },
-    [setSupermarkets, setLoadingSupermarkets, setErrorSupermarkets],
+    [],
   );
   
 

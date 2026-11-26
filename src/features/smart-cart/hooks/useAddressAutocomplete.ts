@@ -10,9 +10,9 @@ export function useAddressAutocomplete(query: string) {
   useEffect(() => {
     const text = query.trim();
 
-    setSuggestions([]);
+    setSuggestions((current) => (current.length === 0 ? current : []));
     setLoading(false);
-    setError(null);
+    setError((current) => (current === null ? current : null));
 
     if (text.length < 5) {
       return;

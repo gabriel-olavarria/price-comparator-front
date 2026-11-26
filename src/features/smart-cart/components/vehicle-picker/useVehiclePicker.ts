@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import type {
   FuelType,
-  UserVehicleRequest,
   VehicleConfiguration,
   VehicleType,
 } from "../../models/vehicle.models";
@@ -17,49 +16,39 @@ export function useVehiclePicker(
   onConfirm?: () => void
 ) {
   const vehicleUser = useVehicleStore((state) => state.vehicleUser);
-  const { loadVehicle, vehicle, loadingVehicle } = useVehicleCharacteristics();
+  const { loadVehicle, loadingVehicle, errorVehicle, resetVehicle } =
+    useVehicleCharacteristics();
   const { loadCatalog, catalog, loadingCatalog, errorCatalog } = useVehicleCatalog();
   const setVehicleUser = useVehicleStore((state) => state.setVehicleUser);
 
-  const [vehicleType, setVehicleType] = useState<VehicleType>("car");
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [vehicleType, setVehicleType] = useState<VehicleType>(
+    vehicleUser?.vehicleType ?? "car",
+  );
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(
+    vehicleUser?.brandId == null ? null : String(vehicleUser.brandId),
+  );
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(
+    vehicleUser?.labelId ?? null,
+  );
+  const [selectedModel, setSelectedModel] = useState<string | null>(
+    vehicleUser?.modelId == null ? null : String(vehicleUser.modelId),
+  );
 
-  const [fuelType, setFuelType] = useState<FuelType>("gasoline");
-  const [efficiency, setEfficiency] = useState<number | string>(12);
+  const [fuelType, setFuelType] = useState<FuelType>(
+    vehicleUser?.fuelType ?? "gasoline",
+  );
+  const [efficiency, setEfficiency] = useState<number | string>(
+    vehicleUser?.efficiency ?? "",
+  );
 
-  // Cargar el catálogo al abrir el modal
   useEffect(() => {
     if (!opened) return;
 
     const controller = new AbortController();
-
-    if (vehicleUser != null) {
-      setVehicleType(vehicleUser.vehicleType);
-      setSelectedBrand(vehicleUser.brandId == null ? null : String(vehicleUser.brandId),);
-      setSelectedModel(vehicleUser.modelId == null ? null : String(vehicleUser.modelId),);
-      setSelectedLabel(vehicleUser.labelId ?? vehicleUser.labelId);
-      setFuelType(vehicleUser.fuelType ?? "gasoline");
-      setEfficiency(vehicleUser.efficiency == null ? 0 : vehicleUser.efficiency,);
-    }
-
     void loadCatalog(controller.signal);
 
     return () => controller.abort();
-  }, [opened, loadVehicle]);
-
- 
-  
-  useEffect(() => {
-    if (vehicle === null) {
-      return;
-    }
-
-    if (vehicle.rendimientoMixto != null) {
-      setEfficiency(vehicle.rendimientoMixto);
-    }
-  }, [vehicle]);
+  }, [opened, loadCatalog]);
 
   // Marcas disponibles para Mantine Select
   const catalogBrands = catalog?.brands
@@ -91,29 +80,47 @@ export function useVehiclePicker(
     }));
 
   const handleVehicleTypeChange = (value: VehicleType) => {
+    resetVehicle();
     setVehicleType(value);
     setSelectedBrand(null);
     setSelectedModel(null);
+    setSelectedLabel(null);
+    setEfficiency("");
   };
 
   const handleBrandChange = (value: string | null) => {
+    resetVehicle();
     setSelectedBrand(value);
     setSelectedModel(null);
+    setSelectedLabel(null);
+    setEfficiency("");
+  };
+
+  const handleModelChange = (value: string | null) => {
+    resetVehicle();
+    setSelectedModel(value);
+    setSelectedLabel(null);
+    setEfficiency("");
   };
 
   const handleLabelChange = async (value: string | null) => {
-    const selectLabel = value === null ? null : value;
     setSelectedLabel(value);
 
-    if (selectLabel != null) {
-      const enviarRequest: UserVehicleRequest = {
-        marcaId: Number(selectedBrand),
-        modeloId: Number(selectedModel),
-        etiquetaId: selectLabel,
-      };
-
-      void loadVehicle(enviarRequest);
+    if (value == null || selectedBrand == null || selectedModel == null) {
+      return;
     }
+
+    const response = await loadVehicle({
+      marcaId: Number(selectedBrand),
+      modeloId: Number(selectedModel),
+      etiquetaId: value,
+    });
+
+    if (!response) {
+      return;
+    }
+
+    setEfficiency(response.rendimientoMixto ?? "");
   };
 
   const numericEfficiency = Number(efficiency);
@@ -159,11 +166,12 @@ export function useVehiclePicker(
     isValid,
     handleVehicleTypeChange,
     handleBrandChange,
-    setSelectedModel,
     setFuelType,
     setEfficiency,
     handleConfirm,
     loadingVehicle,
+    errorVehicle,
     handleLabelChange,
+    handleModelChange,
   };
 }

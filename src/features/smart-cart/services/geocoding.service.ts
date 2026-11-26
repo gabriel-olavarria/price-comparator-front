@@ -147,31 +147,20 @@ export async function searchAddresses(query: string, signal?: AbortSignal,): Pro
     throw new Error("Debes ingresar al menos 3 caracteres para buscar.");
   }
   const params = new URLSearchParams({
-    street: "Conrado araya 451",
-    city: "Copiapó",
-    country: "Chile",
+    q: normalizedQuery,
     format: "jsonv2",
     addressdetails: "1",
     limit: "10",
     countrycodes: "cl",
     "accept-language": "es",
-    layer: "address",
-    dedupe: "0",
-    extratags: "1",
   });
-  
+
   const response = await fetch(`${BASE_URL}/search?${params.toString()}`, {
     method: "GET",
     signal,
     headers: DEFAULT_HEADERS,
   });
 
-
-
-  const data2 = await response.json();
-
-  console.log("Respuesta Nominatim:", data2);
-  
   validateResponse(response, "buscar direcciones");
 
   const data: NominatimResult[] = await response.json();
@@ -186,8 +175,13 @@ export async function searchAddresses(query: string, signal?: AbortSignal,): Pro
       displayName: formatAddress(item.address, item.display_name),
       latitude: Number(item.lat),
       longitude: Number(item.lon),
-      city: item.city ?? "",
-      state: item.state ?? ""
+      city:
+        item.address?.city ??
+        item.address?.town ??
+        item.address?.village ??
+        item.address?.municipality ??
+        "",
+      state: item.address?.state ?? "",
     }))
     .filter(
       (item) =>

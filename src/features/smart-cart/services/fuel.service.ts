@@ -42,9 +42,6 @@ export async function getVehicleConsumption(
   request: UserVehicleRequest,
   signal?: AbortSignal,
 ): Promise<VehicleResponseDto> {
-  
-  console.log(request);
-  
   const response = await httpClient.get<VehicleResponseDto>(
     "/api/fuels/characteristics",
     {
