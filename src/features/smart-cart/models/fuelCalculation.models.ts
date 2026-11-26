@@ -1,5 +1,3 @@
-import type { NearbySupermarketsResponse } from "./supermarketLocation.models.ts";
-
 //REQUEST
 export interface FuelCalculationRequest {
   rendimientoMixto: number;
@@ -23,12 +21,6 @@ export interface RouteSegment {
   to: string;
   distanceKm: number;
 }
-
-export interface FuelCalculateProps {
-  routeSegments: NearbySupermarketsResponse["routeResult"] | null;
-}
-
-
 
 export interface FuelCalulateResponse {
   station: CneFuelStation;

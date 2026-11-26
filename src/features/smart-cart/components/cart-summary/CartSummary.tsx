@@ -25,7 +25,7 @@ export default function CartSummary() {
             </div>
           </div>
           <div className="cart-summary-bottom">
-            <FuelCalculate routeSegments={supermarketsSegments} />
+            <FuelCalculate />
           </div>
 
           <footer className="cart-summary-footer">

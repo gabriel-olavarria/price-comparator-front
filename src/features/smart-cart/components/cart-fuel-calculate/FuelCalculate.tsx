@@ -21,9 +21,6 @@ import { useFuelCalculate } from "./useFuelCalculate.ts";
  
 
 import "./FuelCalculate.css";
-import type {
-  FuelCalculateProps,
-} from "../../models/fuelCalculation.models.ts";
 import { FuelCalculateEmpty } from "../fuel-calculate-empty/FuelCalculateEmpty.tsx";
 import { Center, Loader } from "@mantine/core";
 
@@ -37,7 +34,7 @@ const VehiclePickerModal = lazy(
 
  
 
-export function FuelCalculate (props: FuelCalculateProps) {
+export function FuelCalculate() {
   const {
     locationUser,
     fuelCalculate,
@@ -77,7 +74,7 @@ export function FuelCalculate (props: FuelCalculateProps) {
     stationLocation,
     fuels,
     consumption,
-  } = useFuelCalculate(props);
+  } = useFuelCalculate();
 
  
  
