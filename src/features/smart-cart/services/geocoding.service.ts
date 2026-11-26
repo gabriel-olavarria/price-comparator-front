@@ -146,26 +146,36 @@ export async function searchAddresses(query: string, signal?: AbortSignal,): Pro
   if (normalizedQuery.length < 3) {
     throw new Error("Debes ingresar al menos 3 caracteres para buscar.");
   }
-
   const params = new URLSearchParams({
-    q: normalizedQuery,
+    street: "Conrado araya 451",
+    city: "Copiapó",
+    country: "Chile",
     format: "jsonv2",
     addressdetails: "1",
-    limit: "5",
+    limit: "10",
     countrycodes: "cl",
     "accept-language": "es",
+    layer: "address",
+    dedupe: "0",
+    extratags: "1",
   });
-
+  
   const response = await fetch(`${BASE_URL}/search?${params.toString()}`, {
     method: "GET",
     signal,
     headers: DEFAULT_HEADERS,
   });
 
+
+
+  const data2 = await response.json();
+
+  console.log("Respuesta Nominatim:", data2);
+  
   validateResponse(response, "buscar direcciones");
 
   const data: NominatimResult[] = await response.json();
-
+ 
   if (!Array.isArray(data)) {
     throw new Error("El servicio devolvió una respuesta inesperada.");
   }

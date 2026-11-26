@@ -1,19 +1,20 @@
 import { useCallback } from "react";
 
 import { getVehicleCatalog } from "../services/fuel.service.ts";
-import { useVehicleCatalogStore } from "../stores/useVehicleStore.ts";
+import { useVehicleCatalogStore } from "../stores/vehicleCatalogStore.ts";
+ 
 
 export function useVehicleCatalog() {
   const catalog = useVehicleCatalogStore((state) => state.catalog);
-  const loading = useVehicleCatalogStore((state) => state.loading);
-  const error = useVehicleCatalogStore((state) => state.error);
-  const vehicleStore = useVehicleCatalogStore((state) => state.selectedVehicle);
+  const loadingCatalog = useVehicleCatalogStore((state) => state.loading);
+  const errorCatalog = useVehicleCatalogStore((state) => state.error);
+ 
 
   const setCatalog = useVehicleCatalogStore((state) => state.setCatalog);
-  const setLoading = useVehicleCatalogStore((state) => state.setLoading);
-  const setError = useVehicleCatalogStore((state) => state.setError);
+  const setLoadingCatalog = useVehicleCatalogStore((state) => state.setLoading);
+  const setErrorCatalog = useVehicleCatalogStore((state) => state.setError);
 
-  const load = useCallback(
+  const loadCatalog = useCallback(
     async (signal: AbortSignal): Promise<void> => {
       const state = useVehicleCatalogStore.getState();
 
@@ -22,18 +23,18 @@ export function useVehicleCatalog() {
         return;
       }
 
-      setLoading(true);
-      setError(null);
+      setLoadingCatalog(true);
+      setErrorCatalog(null);
 
       try {
         const response = await getVehicleCatalog(signal);
-          console.log(response);
+        console.log(response);
         if (!signal.aborted) {
           setCatalog(response);
         }
       } catch (error) {
         if (!signal.aborted) {
-          setError(
+          setErrorCatalog(
             error instanceof Error
               ? error.message
               : "Error al obtener el catálogo vehicular.",
@@ -41,21 +42,18 @@ export function useVehicleCatalog() {
         }
       } finally {
         if (!signal.aborted) {
-          setLoading(false);
+          setLoadingCatalog(false);
         }
       }
     },
-    [setCatalog, setLoading, setError],
+    [setCatalog, setLoadingCatalog, setErrorCatalog],
   );
 
   
   return {
-    load,
-    brands: catalog?.brands ?? [],
-    labels: catalog?.labels ?? [],
-    models: catalog?.models ?? [],
-    loading,
-    error,
-    vehicleStore,
+    loadCatalog,
+    loadingCatalog,
+    errorCatalog,
+    catalog,
   };
 }

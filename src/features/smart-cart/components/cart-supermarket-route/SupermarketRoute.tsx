@@ -17,9 +17,8 @@ import { Center, Loader } from "@mantine/core";
 export function SupermarketRoute(props: SupermarketRouteProps) {
   
   const {
-    route,
+    locationUser,
     formatDistance,
-    location,
     locationModalOpened,
     locationLabel,
     loadingSupermarkets,
@@ -27,7 +26,7 @@ export function SupermarketRoute(props: SupermarketRouteProps) {
     openLocationModal,
     closeLocationModal,
     handleConfirmLocation,
-  } = useSupermarketRoute(props);
+  } = useSupermarketRoute();
  
   return (
     <>
@@ -53,30 +52,29 @@ export function SupermarketRoute(props: SupermarketRouteProps) {
           </div>
         </header>
 
-        {!location && (
+        {locationUser == null && (
           <div className="api-status" role="status">
             Selecciona tu ubicación para calcular las distancias del recorrido.
           </div>
         )}
-        
+
         {errorSupermarkets && (
-          <p className="supermarket-route-status supermarket-route-status--error" role="alert">
+          <p
+            className="supermarket-route-status supermarket-route-status--error"
+            role="alert"
+          >
             {errorSupermarkets}
           </p>
         )}
-        
-        
+
         {loadingSupermarkets ? (
           <Center mih={300}>
             <Loader size={36} color="violet" type="dots" />
           </Center>
         ) : (
           <div className="supermarket-route-list">
-            {route.map((segment, index) => (
-              <div
-                key={`${segment.from.id}-${segment.to.id}-${index}`}
-                className="supermarket-route-step"
-              >
+            {props.routeSegments?.segments.map((segment, index) => (
+              <div key={`${segment.from}-${segment.to}-${index}`} className="supermarket-route-step">
                 <div className="supermarket-route-step-indicator">
                   <span className="supermarket-route-step-number">
                     {index + 1}
@@ -85,14 +83,9 @@ export function SupermarketRoute(props: SupermarketRouteProps) {
 
                 <div className="supermarket-route-segment">
                   <div className="supermarket-route-locations">
-                    <RoutePoint location={segment.from} />
-                    <ArrowRight
-                      className="supermarket-route-arrow"
-                      size={23}
-                      strokeWidth={2.2}
-                      aria-hidden="true"
-                    />
-                    <RoutePoint location={segment.to} />
+                    <RoutePoint pointName={segment.from} />
+                    <ArrowRight className="supermarket-route-arrow" size={23} strokeWidth={2.2} aria-hidden="true" />
+                    <RoutePoint pointName={segment.to} />
                   </div>
 
                   <span
@@ -106,8 +99,6 @@ export function SupermarketRoute(props: SupermarketRouteProps) {
             ))}
           </div>
         )}
-        
-
       </section>
 
       {locationModalOpened && (
@@ -116,7 +107,7 @@ export function SupermarketRoute(props: SupermarketRouteProps) {
             opened={locationModalOpened}
             onClose={closeLocationModal}
             onConfirm={handleConfirmLocation}
-            initialLocation={location}
+            initialLocation={locationUser}
             title="Seleccionar ubicación de origen"
           />
         </Suspense>

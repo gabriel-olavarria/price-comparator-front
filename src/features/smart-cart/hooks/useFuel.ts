@@ -2,67 +2,51 @@ import { useCallback} from "react";
 import { calculate } from "../services/fuel.service";
 import { toFuelCalculationRequest } from "../mappers/fuelCalculation.mapper";
 import { useFuelCalculationStore } from "../stores/fuelCalculationStore";
-
-import type { SelectedLocation } from "../models/location.models";
-import type { NearbySupermarkets } from "../models/supermarketLocation.models";
 import type {
-  FuelType,
-} from "../models/fuelCalculation.models";
-import { useLocationStore } from "../stores/locationStore.ts";
-import type { VehicleConfiguration, } from "../models/vehicle.models.ts";
-import { useVehicleCatalogStore } from "../stores/useVehicleStore.ts";
+  NearbySupermarketsResponse,
+} from "../models/supermarketLocation.models";
+import type { SelectedLocation } from "../models/location.models.ts";
+import type { VehicleConfiguration } from "../models/vehicle.models.ts";
 
 interface LoadParams {
-  selectedLocationMap: SelectedLocation;
-  selectedFuelType: FuelType;
-  nearestByStore: NearbySupermarkets["nearestByStore"];
-  selectedVehicle: VehicleConfiguration;
+  currentLocation: SelectedLocation;
+  currentVehicle: VehicleConfiguration;
+  routeSegments: NearbySupermarketsResponse["routeResult"];
 }
  
 
 export function useFuel() {
-  const data = useFuelCalculationStore((state) => state.data);
+
+  const fuelCalculate = useFuelCalculationStore((state) => state.data);
   const loadingCalculate = useFuelCalculationStore((state) => state.loading);
   const errorCalculate = useFuelCalculationStore((state) => state.error);
-  const setData = useFuelCalculationStore((state) => state.setData);
-  const setLoading = useFuelCalculationStore((state) => state.setLoading);
-  const setError = useFuelCalculationStore((state) => state.setError);
-  const setSelectedLocation = useLocationStore((state) => state.setSelectedLocation);
-  const setSelectedVehicle = useVehicleCatalogStore((state) => state.setSelectedVehicle);
+  const setFuelCalculate = useFuelCalculationStore((state) => state.setData);
+  const setLoadingFuel = useFuelCalculationStore((state) => state.setLoading);
+  const setErrorFuel = useFuelCalculationStore((state) => state.setError);
 
-  
   const load = useCallback(
     async (
-      {
-        selectedLocationMap,
-        selectedFuelType,
-        nearestByStore,
-        selectedVehicle,
-      }: LoadParams,
+      { currentLocation, routeSegments, currentVehicle }: LoadParams,
       signal: AbortSignal,
     ): Promise<void> => {
+      setLoadingFuel(true);
       const request = toFuelCalculationRequest({
-        selectedLocationMap,
-        selectedFuelType,
-        nearestByStore,
-        selectedVehicle,
+        currentLocation,
+        routeSegments,
+        currentVehicle,
       });
-      const requestKey = JSON.stringify(request);
-
-      setLoading(true);
-      setError(null);
 
       try {
+        console.log("reques useFuel",request);
         const response = await calculate(request, signal);
-        console.log(response);
+        console.log("response useFuel", response);
+
         if (!signal.aborted) {
-          setData(response, requestKey!);
-          setSelectedLocation(selectedLocationMap);
-          setSelectedVehicle(selectedVehicle);
+          setFuelCalculate(response);
         }
       } catch (error) {
         if (!signal.aborted) {
-          setError(
+          setErrorFuel(
             error instanceof Error
               ? error.message
               : "Error al calcular combustible",
@@ -70,18 +54,16 @@ export function useFuel() {
         }
       } finally {
         if (!signal.aborted) {
-          setLoading(false);
+          setLoadingFuel(false);
         }
       }
     },
-    [setData, setLoading, setError],
+    [setFuelCalculate, setLoadingFuel, setErrorFuel],
   );
-
- 
 
   return {
     load,
-    data,
+    fuelCalculate,
     loadingCalculate,
     errorCalculate,
   };

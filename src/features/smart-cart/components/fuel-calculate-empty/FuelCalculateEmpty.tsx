@@ -1,15 +1,15 @@
 import { CarFront, Plus } from "lucide-react";
-import type { SelectedLocation } from "../../models/location.models.ts";
+import { useLocationStore } from "../../stores/locationStore.ts";
 
 export interface FuelCalculateEmptyProps {
-  selectedLocationMap: SelectedLocation | null;
   onOpened: () => void;
 }
 
 
 export function FuelCalculateEmpty(props: FuelCalculateEmptyProps){
-  const { selectedLocationMap, onOpened } = props;
-  
+  const {  onOpened } = props;
+  const locationUser = useLocationStore((state) => state.locationUser);
+
 
   return (
     <section className="smart-cart-empty">
@@ -20,11 +20,11 @@ export function FuelCalculateEmpty(props: FuelCalculateEmptyProps){
       <h2>Tu medio de transporte</h2>
 
       <p>
-        {selectedLocationMap == null
+        {locationUser == null
           ? "Debe configurar su ubicación para calcular la ruta"
           : "Debe configurar su medio de transporte para medir las métricas"}
       </p>
-      {selectedLocationMap && (
+      {locationUser && (
         <button
           type="button"
           className="smart-cart-add-more"

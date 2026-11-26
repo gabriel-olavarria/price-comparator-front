@@ -1,0 +1,67 @@
+flowchart LR
+
+    subgraph FEATURES["📁 features"]
+        direction TB
+        SEARCH["📁 product-search"]
+        CART["📁 smart-cart"]
+    end
+
+    subgraph MODULE["📁 cart-summary"]
+        direction TB
+        COMPONENT["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' width='20' height='20' /><span>CartSummary.tsx</span></div>"]
+        HOOK["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' width='20' height='20' /><span>useCartSummary.ts</span></div>"]
+        EFFECT["⚡ useEffect"]
+    end
+    
+    subgraph MODULE2["📁 cart-supermarket-route"]
+        direction TB
+        COMPONENT2["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' width='20' height='20' /><span>SupermarketRoute.tsx</span></div>"]
+        HOOK2["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;width:235px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' width='20' height='20' /><span>useSupermarketRoute.ts</span></div>"]
+        ACTION["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/mouse-pointer-click.svg' width='20' height='20' style='filter:brightness(0) invert(1);' /><span>Elegir Ubicación</span></div>"]
+        EVENT["▶ handleConfirmLocation()"]
+        EVENT2["▶ locationModalOpened"]
+        COMPONENT5["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' width='20' height='20' /><span>LocationPickerModal.tsx</span></div>"]
+
+    end
+
+    subgraph MODULE3["📁 cart-fuel-calculate"]
+        direction TB
+        COMPONENT3["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' width='20' height='20' /><span>FuelCalculate.tsx</span></div>"]
+        HOOK3["<div style='display:flex;align-items:center;gap:8px;white-space:nowrap;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' width='20' height='20' /><span>useFuelCalculate.ts</span></div>"]
+    end
+
+    CART --> COMPONENT
+    COMPONENT --> HOOK
+    HOOK --> EFFECT
+    COMPONENT --> COMPONENT2
+    COMPONENT --> COMPONENT3
+    COMPONENT2 --> HOOK2
+    COMPONENT2 --> COMPONENT5
+    COMPONENT3 --> HOOK3
+    ACTION --> EVENT
+    EVENT --> HOOK2
+    EVENT2 --> HOOK2
+    
+    classDef folder fill:#20212b,stroke:#7036d9,color:#ffffff,stroke-width:2px
+    classDef file fill:#292a37,stroke:#52526a,color:#ffffff,rx:12,ry:12
+
+    class SEARCH,CART folder
+    class COMPONENT,COMPONENT2,COMPONENT3,HOOK,HOOK2,HOOK3,EFFECT,STORE,HTTP,PRODUCT file
+
+    style FEATURES fill:#15151e,stroke:#7036d9,color:#ffffff
+    
+    style MODULE fill:#15151e,stroke:#7036d9,color:#ffffff
+    style MODULE2 fill:#15151e,stroke:#7036d9,color:#ffffff
+    style MODULE3 fill:#15151e,stroke:#7036d9,color:#ffffff
+   
+    style HOOK fill:#292a37,stroke:#52526a,color:#ffffff
+    style HOOK2 fill:#292a37,stroke:#52526a,color:#ffffff
+    style HOOK3 fill:#292a37,stroke:#52526a,color:#ffffff
+
+    style EFFECT fill:#292a37,stroke:#a78bfa,color:#ffffff,stroke-width:2px
+
+    style EVENT fill:#292a37,stroke:#a78bfa,color:#ffffff,stroke-width:2px
+
+    style ACTION   fill:#292a37,stroke:#38bdf8,color:#ffffff
+    
+    linkStyle default stroke:#a78bfa,stroke-width:2px

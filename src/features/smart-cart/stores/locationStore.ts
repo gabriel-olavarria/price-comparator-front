@@ -1,33 +1,27 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, subscribeWithSelector } from "zustand/middleware";
 
-import type { SelectedLocation } from "../models/location.models.ts";
+import type { SelectedLocation } from "../models/location.models";
 
 interface LocationState {
-  selectedLocation: SelectedLocation | null;
-
-  setSelectedLocation: (location: SelectedLocation) => void;
-
-  clearSelectedLocation: () => void;
+  locationUser: SelectedLocation | null;
+  setLocationUser: (location: SelectedLocation) => void;
 }
 
 export const useLocationStore = create<LocationState>()(
-  persist(
-    (set) => ({
-      selectedLocation: null,
-
-      setSelectedLocation: (location) =>
-        set({
-          selectedLocation: location,
+  subscribeWithSelector(
+    persist(
+      (set) => ({
+        locationUser: null,
+        setLocationUser: (locationUser) => set({ locationUser }),
+      }),
+      {
+        name: "price-comparator-user-location",
+        version: 1,
+        partialize: (state) => ({
+          locationUser: state.locationUser,
         }),
-
-      clearSelectedLocation: () =>
-        set({
-          selectedLocation: null,
-        }),
-    }),
-    {
-      name: "price-comparator-user-location",
-    },
+      },
+    ),
   ),
 );

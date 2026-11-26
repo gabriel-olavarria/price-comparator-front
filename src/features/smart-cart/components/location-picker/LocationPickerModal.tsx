@@ -7,13 +7,15 @@ import AddressSearch from "./AddressSearch";
 import LocationMap from "./LocationMap";
 
 import { useUserLocation } from "../../hooks/useUserLocation";
-
 import { reverseGeocode } from "../../services/geocoding.service.ts";
+import { useLocationStore } from "../../stores/locationStore.ts";
 
 import type {
   Coordinates,
   SelectedLocation,
 } from "../../models/location.models.ts";
+
+import type { AddressSuggestion } from "../../models/addressSuggestion.models.ts";
 
 import "./LocationPickerModal.css";
 
@@ -25,10 +27,23 @@ interface Props {
   title?: string;
 }
 
-export default function LocationPickerModal({ opened, onClose, onConfirm, initialLocation, title = "Seleccionar ubicación", }: Props) {
+export default function LocationPickerModal({
+  opened,
+  onClose,
+  onConfirm,
+  initialLocation,
+  title = "Seleccionar ubicación",
+}: Props) {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const { location: userLocation, loading, error, getLocation, } = useUserLocation();
+  const {
+    location: userLocation,
+    loading,
+    error,
+    getLocation,
+  } = useUserLocation();
+
+  const setLocationUser = useLocationStore((state) => state.setLocationUser);
 
   const [selected, setSelected] = useState<SelectedLocation | null>(null);
 
@@ -45,6 +60,7 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
 
     const request = new AbortController();
     controller.current = request;
+
     const id = ++requestId.current;
 
     setSelected({
@@ -68,7 +84,7 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
         ...coordinates,
         address: address.address,
         city: address.city,
-        state: address.state
+        state: address.state,
       });
     } catch {
       if (request.signal.aborted || id !== requestId.current) {
@@ -94,12 +110,14 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
     if (opened && !wasOpened.current) {
       setSelected(initialLocation ?? null);
       setAddressError(null);
+
       getLocation();
     }
 
     if (!opened) {
       controller.current?.abort();
       requestId.current++;
+
       setResolvingAddress(false);
     }
 
@@ -111,6 +129,29 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
       void resolveLocation(userLocation);
     }
   }, [opened, userLocation, initialLocation, selected, resolveLocation]);
+
+  useEffect(() => {
+    return () => {
+      controller.current?.abort();
+      requestId.current++;
+    };
+  }, []);
+
+  const handleAddressSelect = (suggestion: AddressSuggestion) => {
+    controller.current?.abort();
+    requestId.current++;
+
+    setResolvingAddress(false);
+    setAddressError(null);
+
+    setSelected({
+      latitude: suggestion.latitude,
+      longitude: suggestion.longitude,
+      address: suggestion.formatted,
+      city: suggestion.city ?? "",
+      state: suggestion.region ?? "",
+    });
+  };
 
   const handleMapChange = (coordinates: Coordinates) => {
     void resolveLocation(coordinates);
@@ -125,11 +166,20 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
   };
 
   const handleConfirm = () => {
-    if (!selected || resolvingAddress) return;
+    if (!selected || resolvingAddress) {
+      return;
+    }
 
+    setLocationUser(selected);
     onConfirm(selected);
     onClose();
   };
+
+  const searchValue =
+    selected?.address === "Obteniendo dirección..." ||
+    selected?.address === "Dirección no disponible"
+      ? ""
+      : (selected?.address ?? "");
 
   return (
     <Modal
@@ -141,34 +191,17 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
       radius="lg"
       fullScreen={isMobile}
       className="location-picker-modal"
-      overlayProps={{ backgroundOpacity: 0.5, blur: 3, }}
+      overlayProps={{
+        backgroundOpacity: 0.5,
+        blur: 3,
+      }}
     >
       <div className="location-picker">
         <Text size="sm" c="dimmed">
           Busca una dirección o selecciona un punto en el mapa.
         </Text>
 
-        <AddressSearch
-          value={
-            selected?.address === "Obteniendo dirección..." ? ""
-              : selected?.address === "Dirección no disponible" ? ""
-                : (selected?.address ?? "")
-          }
-          onSelect={(result) => {
-            controller.current?.abort();
-            requestId.current++;
-            setResolvingAddress(false);
-            setAddressError(null);
-
-            setSelected({
-              latitude: result.latitude,
-              longitude: result.longitude,
-              address: result.displayName,
-              city: result.city,
-              state: result.state,
-            });
-          }}
-        />
+        <AddressSearch value={searchValue} onSelect={handleAddressSelect} />
 
         <Group justify="flex-end">
           <Button
@@ -191,6 +224,7 @@ export default function LocationPickerModal({ opened, onClose, onConfirm, initia
         ) : (
           <div className="location-picker__placeholder">
             <MapPin size={24} />
+
             <Text size="sm">
               {loading
                 ? "Obteniendo ubicación..."

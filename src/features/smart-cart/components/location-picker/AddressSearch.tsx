@@ -1,73 +1,45 @@
-import { useEffect, useRef, useState } from "react";
-import { Alert, Button, Loader, TextInput } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Alert, Loader, TextInput } from "@mantine/core";
 import { MapPin, Search } from "lucide-react";
 
-import { searchAddresses } from "../../services/geocoding.service.ts";
-import type { AddressResult } from "../../models/location.models.ts";
+import { useAddressAutocomplete } from "../../hooks/useAddressAutocomplete";
+import type { AddressSuggestion } from "../../models/addressSuggestion.models.ts";
 
 interface Props {
   value?: string;
-  onSelect: (result: AddressResult) => void;
+  onSelect: (suggestion: AddressSuggestion) => void;
 }
 
 export default function AddressSearch({ value = "", onSelect }: Props) {
   const [query, setQuery] = useState(value);
-  const [results, setResults] = useState<AddressResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedQuery, setSelectedQuery] = useState<string | null>(value);
 
-  const controller = useRef<AbortController | null>(null);
-  const lastRequest = useRef(0);
+  const activeQuery = selectedQuery === query ? "" : query;
+
+  const { suggestions, loading, error } = useAddressAutocomplete(activeQuery);
 
   useEffect(() => {
     setQuery(value);
+    setSelectedQuery(value);
   }, [value]);
 
-  useEffect(() => {
-    return () => controller.current?.abort();
-  }, []);
-
-  const handleSearch = async () => {
-    if (query.trim().length < 3) {
-      setError("Escribe al menos 3 caracteres.");
+  const handleSelect = (suggestion: AddressSuggestion) => {
+    if (
+      !Number.isFinite(suggestion.latitude) ||
+      !Number.isFinite(suggestion.longitude)
+    ) {
       return;
     }
 
-    if (Date.now() - lastRequest.current < 1100) {
-      setError("Espera un momento antes de buscar nuevamente.");
-      return;
-    }
+    const displayName = suggestion.formatted.trim() || query;
 
-    controller.current?.abort();
+    setSelectedQuery(displayName);
+    setQuery(displayName);
 
-    const request = new AbortController();
-    controller.current = request;
-    lastRequest.current = Date.now();
-
-    setLoading(true);
-    setError(null);
-    setResults([]);
-
-    try {
-      const data = await searchAddresses(query, request.signal);
-
-      if (request.signal.aborted) return;
-
-      setResults(data);
-
-      if (!data.length) {
-        setError("No se encontraron direcciones.");
-      }
-    } catch {
-      if (!request.signal.aborted) {
-        setError("No fue posible buscar la dirección.");
-      }
-    } finally {
-      if (!request.signal.aborted) {
-        setLoading(false);
-      }
-    }
+    onSelect(suggestion);
   };
+
+  const showResults = activeQuery.trim().length >= 5 && suggestions.length > 0;
 
   return (
     <div className="location-picker__search-section">
@@ -75,42 +47,41 @@ export default function AddressSearch({ value = "", onSelect }: Props) {
         <TextInput
           placeholder="Buscar dirección, calle o supermercado..."
           leftSection={<Search size={17} />}
+          rightSection={loading ? <Loader size="xs" /> : null}
           value={query}
-          onChange={(event) => setQuery(event.currentTarget.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              void handleSearch();
-            }
+          onChange={(event) => {
+            setSelectedQuery(null);
+            setQuery(event.currentTarget.value);
           }}
           className="location-picker__search-input"
+          aria-label="Buscar dirección"
         />
-
-        <Button
-          onClick={() => void handleSearch()}
-          disabled={loading}
-          className="location-picker__primary"
-        >
-          {loading ? <Loader size="xs" color="white" /> : "Buscar"}
-        </Button>
       </div>
 
       {error && <Alert color="orange">{error}</Alert>}
 
-      {results.length > 0 && (
+      {showResults && (
         <div className="location-picker__results">
-          {results.map((result) => (
+          {suggestions.map((suggestion, index) => (
             <button
               type="button"
-              key={result.id}
+              key={`${suggestion.matchId ?? "address"}-${index}`}
               className="location-picker__result"
-              onClick={() => {
-                onSelect(result);
-                setQuery(result.displayName);
-                setResults([]);
-              }}
+              onClick={() => handleSelect(suggestion)}
             >
               <MapPin size={17} />
-              <span>{result.displayName}</span>
+
+              <div className="location-picker__result-content">
+                <span className="location-picker__result-title">
+                  {suggestion.shortLabel || suggestion.formatted}
+                </span>
+
+                <span className="location-picker__result-subtitle">
+                  {[suggestion.city, suggestion.region, suggestion.country]
+                    .filter(Boolean)
+                    .join(", ")}
+                </span>
+              </div>
             </button>
           ))}
         </div>

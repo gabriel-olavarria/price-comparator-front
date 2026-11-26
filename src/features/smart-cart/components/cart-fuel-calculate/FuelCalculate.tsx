@@ -39,14 +39,14 @@ const VehiclePickerModal = lazy(
 
 export function FuelCalculate (props: FuelCalculateProps) {
   const {
-    selectedLocationMap,
-
+    locationUser,
+    fuelCalculate,
     // Combustible
     selectedFuelType,
     setSelectedFuelType,
 
     //Vehiculo
-    selectedVehicle,
+    vehicleUser,
 
     // Modal de ubicación
     locationModalOpened,
@@ -65,19 +65,18 @@ export function FuelCalculate (props: FuelCalculateProps) {
     errorCalculate,
 
     // Precios
-    fuelPrices,
 
     // Métricas
     distanceKm,
     fuelEfficiency,
-    fuelLiters,
-    fuelCost,
 
     // Estación
     stationName,
     stationAddress,
     stationDistance,
     stationLocation,
+    fuels,
+    consumption,
   } = useFuelCalculate(props);
 
  
@@ -87,8 +86,8 @@ export function FuelCalculate (props: FuelCalculateProps) {
 
  
 
-  const vehicleDescription = selectedVehicle
-    ? selectedVehicle.vehicleType === "walking"
+  const vehicleDescription = vehicleUser
+    ? vehicleUser.vehicleType === "walking"
       ? "Sin vehículo"
       : "Vehículo configurado"
     : "Configurar vehículo";
@@ -108,7 +107,7 @@ export function FuelCalculate (props: FuelCalculateProps) {
               <p>Estimación del combustible para tu recorrido</p>
             </div>
           </div>
-          {selectedVehicle && (
+          {vehicleUser && (
             <div className="route-location-control">
               <div className="route-current-location">
                 <MapPin size={21} strokeWidth={2} aria-hidden="true" />
@@ -119,7 +118,6 @@ export function FuelCalculate (props: FuelCalculateProps) {
                   <strong title={nameStationLocation}>
                     {nameStationLocation}
                   </strong>
-
                   {stationDistance !== null && (
                     <span>
                       A {formatNumber(stationDistance)} km de tu ubicación
@@ -139,125 +137,140 @@ export function FuelCalculate (props: FuelCalculateProps) {
             </div>
           )}
         </header>
-        {/* ESTADOS DE LA API */}
-        {loadingCalculate && (
-          <div className="api-status" role="status">
-            Calculando recorrido y combustible...
-          </div>
-        )}
+        {/* ERROR DE LA API */}
         {errorCalculate && (
           <div className="api-status-error" role="alert">
             {errorCalculate}
           </div>
         )}
-        {selectedVehicle == null ? (
-          <FuelCalculateEmpty
-            selectedLocationMap={selectedLocationMap}
-            onOpened={handleOpenVehicleModal}
-          />
-        ) : (
-          selectedVehicle && loadingCalculate ? (
-            <Center mih={300}>
-              <Loader size={36} color="violet" type="dots" />
-            </Center>
-            ) : (
-            <>
-              {/* PRECIOS DE COMBUSTIBLES */}
-              <div className="cart-fuel-distance-fuels">
-                <div className="cart-fuel-distance-section-heading">
-                  <h4>Precios de combustibles</h4>
-                  <span>CLP por litro</span>
-                </div>
-
-                <div className="cart-fuel-distance-prices">
-                  {fuelPrices.map((fuel) => {
-                    const isSelected = selectedFuelType === fuel.type;
-
-                    return (
-                      <button
-                        key={fuel.type}
-                        type="button"
-                        className={["cart-fuel-distance-price-card", isSelected ? "cart-fuel-distance-price-card-active" : "",]
-                          .filter(Boolean)
-                          .join(" ")}
-                        onClick={() => setSelectedFuelType(fuel.type)}
-                        aria-pressed={isSelected}
-                      >
-                        <span className="cart-fuel-distance-price-label">
-                          {fuel.label}
-                        </span>
-                        <strong>{formatFuelPrice(fuel.price)}</strong>
-                        <span className="cart-fuel-distance-price-caption">
-                          {isSelected ? "Seleccionado" : "Por litro"}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+        {(locationUser == null || vehicleUser == null) && (
+          <FuelCalculateEmpty onOpened={handleOpenVehicleModal} />
+        )}
+        {loadingCalculate && (
+          <Center mih={300}>
+            <Loader size={36} color="violet" type="dots" />
+          </Center>
+        )}
+        {!loadingCalculate && fuelCalculate !== null && (
+          <>
+            {/* PRECIOS DE COMBUSTIBLES */}
+            <div className="cart-fuel-distance-fuels">
+              <div className="cart-fuel-distance-section-heading">
+                <h4>Precios de combustibles</h4>
+                <span>CLP por litro</span>
               </div>
-              {/* COSTO Y VEHÍCULO */}
-              <div className="cart-fuel-distance-main">
-                <div className="cart-fuel-distance-cost">
-                  <div className="cart-fuel-distance-cost-label">
-                    <Wallet size={19} aria-hidden="true" />
-                    <span>Costo estimado de combustible</span>
-                  </div>
 
-                  <strong>
-                    {loadingCalculate ? "Calculando..." : fuelCost != null ? formatPrice(fuelCost) : "Pendiente"}
-                  </strong>
+              <div className="cart-fuel-distance-prices">
+                {fuels.map(([type, fuel]) => {
+                  const isSelected = selectedFuelType?.combustible === type;
 
-                  <span className="cart-fuel-distance-cost-description">
-                    Para el recorrido completo
-                  </span>
-                </div>
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      className={[
+                        "cart-fuel-distance-price-card",
+                        isSelected
+                          ? "cart-fuel-distance-price-card-active"
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => {
+                        console.log("Combustible seleccionado:", fuel);
+                        console.log("Precio distancia:", fuel.precioDistancia);
 
-                {/* VEHÍCULO */}
-                <button type="button" className="cart-fuel-distance-vehicle" onClick={handleOpenVehicleModal} aria-label="Configurar mi vehículo">
-                  <span className="cart-fuel-distance-vehicle-icon">
-                    <CarFront size={30} strokeWidth={1.7} aria-hidden="true" />
-                  </span>
-                  <strong>Mi vehículo</strong>
-                  <span>{vehicleDescription}</span>
-                </button>
+                        setSelectedFuelType(fuel);
+                      }}
+                      aria-pressed={isSelected}
+                    >
+                      <span className="cart-fuel-distance-price-label">
+                        {fuel.combustible}
+                      </span>
+                      <strong>{formatFuelPrice(fuel.precioLitro)}</strong>
+                      <span className="cart-fuel-distance-price-caption">
+                        {isSelected ? "Seleccionado" : "Por litro"}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
-              {/* MÉTRICAS */}
-              <div className="cart-fuel-distance-metrics">
-                {/* DISTANCIA */}
-                <div className="cart-fuel-distance-metric">
-                  <div className="cart-fuel-distance-metric-label">
-                    <Route size={18} aria-hidden="true" />
-                    <span>Distancia total</span>
-                  </div>
-                  <strong>
-                    {distanceKm != null ? `${formatNumber(distanceKm!)} km` : "Pendiente"}
-                  </strong>
+            </div>
+            {/* COSTO Y VEHÍCULO */}
+            <div className="cart-fuel-distance-main">
+              <div className="cart-fuel-distance-cost">
+                <div className="cart-fuel-distance-cost-label">
+                  <Wallet size={19} aria-hidden="true" />
+                  <span>Costo estimado de combustible</span>
                 </div>
 
-                {/* CONSUMO */}
-                <div className="cart-fuel-distance-metric">
-                  <div className="cart-fuel-distance-metric-label">
-                    <Navigation size={18} aria-hidden="true" />
-                    <span>Consumo estimado</span>
-                  </div>
-                  <strong>
-                    {fuelLiters != null ? `${formatNumber(fuelLiters)} L` : "Pendiente"}
-                  </strong>
-                </div>
+                <strong>
+                  {loadingCalculate
+                    ? "Calculando..."
+                    : selectedFuelType?.precioDistancia != null
+                      ? formatPrice(selectedFuelType.precioDistancia)
+                      : "Pendiente"}
+                </strong>
 
-                {/* RENDIMIENTO */}
-                <div className="cart-fuel-distance-metric">
-                  <div className="cart-fuel-distance-metric-label">
-                    <Gauge size={18} aria-hidden="true" />
-                    <span>Rendimiento</span>
-                  </div>
-                  <strong>
-                    {fuelEfficiency != null ? `${formatNumber(fuelEfficiency)} km/L` : "Pendiente"}
-                  </strong>
-                </div>
+                <span className="cart-fuel-distance-cost-description">
+                  Para el recorrido completo
+                </span>
               </div>
-            </>
-          )
+
+              {/* VEHÍCULO */}
+              <button
+                type="button"
+                className="cart-fuel-distance-vehicle"
+                onClick={handleOpenVehicleModal}
+                aria-label="Configurar mi vehículo"
+              >
+                <span className="cart-fuel-distance-vehicle-icon">
+                  <CarFront size={30} strokeWidth={1.7} aria-hidden="true" />
+                </span>
+                <strong>Mi vehículo</strong>
+                <span>{vehicleDescription}</span>
+              </button>
+            </div>
+            {/* MÉTRICAS */}
+            <div className="cart-fuel-distance-metrics">
+              {/* DISTANCIA */}
+              <div className="cart-fuel-distance-metric">
+                <div className="cart-fuel-distance-metric-label">
+                  <Route size={18} aria-hidden="true" />
+                  <span>Distancia total</span>
+                </div>
+                <strong>
+                  {distanceKm != null
+                    ? `${formatNumber(distanceKm!)} km`
+                    : "Pendiente"}
+                </strong>
+              </div>
+
+              {/* CONSUMO */}
+              <div className="cart-fuel-distance-metric">
+                <div className="cart-fuel-distance-metric-label">
+                  <Navigation size={18} aria-hidden="true" />
+                  <span>Consumo estimado</span>
+                </div>
+                <strong>
+                  {consumption != null ? consumption : "Pendiente"}
+                </strong>
+              </div>
+
+              {/* RENDIMIENTO */}
+              <div className="cart-fuel-distance-metric">
+                <div className="cart-fuel-distance-metric-label">
+                  <Gauge size={18} aria-hidden="true" />
+                  <span>Rendimiento</span>
+                </div>
+                <strong>
+                  {fuelEfficiency != null
+                    ? `${formatNumber(fuelEfficiency)} km/L`
+                    : "Pendiente"}
+                </strong>
+              </div>
+            </div>
+          </>
         )}
       </section>
 

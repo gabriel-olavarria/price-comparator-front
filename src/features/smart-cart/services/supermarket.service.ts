@@ -1,15 +1,15 @@
 import { httpClient } from "../../../shared/api/axios";
 
 import type {
-  NearbySupermarkets,
   NearbySupermarketsRequest,
+  NearbySupermarketsResponse,
 } from "../models/supermarketLocation.models";
 
 export async function fetchNearbySupermarkets(
   request: NearbySupermarketsRequest,
   signal?: AbortSignal,
-): Promise<NearbySupermarkets> {
-  const response = await httpClient.post<NearbySupermarkets>(
+): Promise<NearbySupermarketsResponse> {
+  const response = await httpClient.post<NearbySupermarketsResponse>(
     "/api/supermarkets/nearby",
     {
       latitude: request.origin.latitude,

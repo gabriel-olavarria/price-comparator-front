@@ -14,7 +14,7 @@ export interface VehicleConfiguration {
 export interface VehiclePickerModalProps {
   opened: boolean;
   onClose: () => void;
-  onConfirm?: (vehicle: VehicleConfiguration) => void;
+  onConfirm?: () => void;
   
 }
 

@@ -9,13 +9,17 @@ import type {
 
 import { useVehicleCatalog } from "../../hooks/useVehicleCatalog.ts";
 import { useVehicleCharacteristics } from "../../hooks/useVehicleCharacteristics.ts";
+import { useVehicleStore } from "../../stores/vehicleStore.ts";
+ 
 
 export function useVehiclePicker(
   opened: boolean,
-  onConfirm?: (vehicle: VehicleConfiguration) => void
+  onConfirm?: () => void
 ) {
-  const { load, brands, models, labels, loading, error, vehicleStore } = useVehicleCatalog();
+  const vehicleUser = useVehicleStore((state) => state.vehicleUser);
   const { loadVehicle, vehicle, loadingVehicle } = useVehicleCharacteristics();
+  const { loadCatalog, catalog, loadingCatalog, errorCatalog } = useVehicleCatalog();
+  const setVehicleUser = useVehicleStore((state) => state.setVehicleUser);
 
   const [vehicleType, setVehicleType] = useState<VehicleType>("car");
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
@@ -28,22 +32,22 @@ export function useVehiclePicker(
   // Cargar el catálogo al abrir el modal
   useEffect(() => {
     if (!opened) return;
-    
+
     const controller = new AbortController();
-    console.log(vehicleStore);
-    if(vehicleStore!= null){
-      setVehicleType(vehicleStore.vehicleType);
-      setSelectedBrand(vehicleStore.brandId == null ? null : String(vehicleStore.brandId),);
-      setSelectedModel(vehicleStore.modelId == null ? null : String(vehicleStore.modelId),);
-      setSelectedLabel(vehicleStore.labelId ?? vehicleStore.labelId);
-      setFuelType(vehicleStore.fuelType ?? "gasoline");
-      setEfficiency(vehicleStore.efficiency == null ? 0 : vehicleStore.efficiency);
+
+    if (vehicleUser != null) {
+      setVehicleType(vehicleUser.vehicleType);
+      setSelectedBrand(vehicleUser.brandId == null ? null : String(vehicleUser.brandId),);
+      setSelectedModel(vehicleUser.modelId == null ? null : String(vehicleUser.modelId),);
+      setSelectedLabel(vehicleUser.labelId ?? vehicleUser.labelId);
+      setFuelType(vehicleUser.fuelType ?? "gasoline");
+      setEfficiency(vehicleUser.efficiency == null ? 0 : vehicleUser.efficiency,);
     }
-    
-    void load(controller.signal);
+
+    void loadCatalog(controller.signal);
 
     return () => controller.abort();
-  }, [opened, load]);
+  }, [opened, loadVehicle]);
 
  
   
@@ -58,14 +62,14 @@ export function useVehiclePicker(
   }, [vehicle]);
 
   // Marcas disponibles para Mantine Select
-  const catalogBrands = brands
+  const catalogBrands = catalog?.brands
     .filter((item) => item.nombre !== null && item.nombre.trim() !== "")
     .map((item) => ({
       value: String(item.id),
       label: item.nombre!,
     }));
 
-  const catalogLabels = labels
+  const catalogLabels = catalog?.labels
     .filter((item) => item.nombre !== null && item.nombre.trim() !== "")
     .map((item) => ({
       value: String(item.id),
@@ -73,7 +77,7 @@ export function useVehiclePicker(
     }));
 
   // Modelos correspondientes a la marca seleccionada
-  const catalogModels = models
+  const catalogModels = catalog?.models
     .filter(
       (item) =>
         selectedBrand !== null &&
@@ -116,13 +120,10 @@ export function useVehiclePicker(
 
   const isValid =
     vehicleType === "walking" ||
-    (selectedBrand !== null &&
-      selectedModel !== null &&
-      catalogBrands.some((item) => item.value === selectedBrand) &&
-      catalogModels.some((item) => item.value === selectedModel) &&
-      String(efficiency).trim() !== "" &&
-      Number.isFinite(numericEfficiency) &&
-      numericEfficiency > 0);
+    (selectedBrand !== null && selectedModel !== null &&
+      catalogBrands != null && catalogBrands.some((item) => item.value === selectedBrand) &&
+      catalogModels != null && catalogModels.some((item) => item.value === selectedModel) &&
+      String(efficiency).trim() !== "" && Number.isFinite(numericEfficiency) && numericEfficiency > 0);
 
   const handleConfirm = (): boolean => {
     if (!isValid) return false;
@@ -137,8 +138,8 @@ export function useVehiclePicker(
       fuelType: isWalking ? null : fuelType,
       efficiency: isWalking ? null : numericEfficiency,
     };
-
-    onConfirm?.(configuration);
+    setVehicleUser(configuration);
+    onConfirm?.();
 
     return true;
   };
@@ -153,8 +154,8 @@ export function useVehiclePicker(
     catalogLabels,
     catalogBrands,
     catalogModels,
-    loading,
-    error,
+    loadingCatalog,
+    errorCatalog,
     isValid,
     handleVehicleTypeChange,
     handleBrandChange,

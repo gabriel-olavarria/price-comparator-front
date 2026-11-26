@@ -1,43 +1,47 @@
 import { useSmartCartStore } from "../../stores/smartCartStore";
-import { useLocationStore } from "../../stores/locationStore";
+ 
 import { useNearbySupermarkets } from "../../hooks/useNearbySupermarkets.ts";
-import { useEffect, useState } from "react";
-import type { SelectedLocation } from "../../models/location.models.ts";
+import { useEffect } from "react";
+
+import { useLocationStore } from "../../stores/locationStore.ts";
 
 
 export function useCartSummary() {
-  const [selectedLocationMap, setSelectedLocationMap] = useState<SelectedLocation | null>(null);
-  const selectedLocation = useLocationStore((state) => state.selectedLocation);
   const storeKeys = useSmartCartStore((state) => state.storeKeys);
- 
-  const { dataMarket, loadingSupermarkets, errorSupermarkets, load } = useNearbySupermarkets();
-  
+  const { supermarketsSegments, loadingSupermarkets, errorSupermarkets, load } = useNearbySupermarkets();
+  const locationUser = useLocationStore((state) => state.locationUser,);
+
+
+
   useEffect(() => {
-  
-    if(selectedLocationMap == null) {
-      return;
-    }
-    if (selectedLocation != null && selectedLocation == selectedLocationMap) {
-      return;
-    }
+    let controller: AbortController | null = null;
 
-    if (storeKeys.length == 0) {
-      return;
-    } 
-    
-    const controller = new AbortController();
+    const unsubscribe = useLocationStore.subscribe(
+      (state) => state.locationUser,
+      (current, previous) => {
+        controller?.abort();
+        controller = new AbortController();
+        if (!current) return;
+        if (previous != current) {
+          void load({ locationUser: current, storeKeys }, controller.signal);
+        }
+      },
+      {
+        fireImmediately: true,
+      },
+    );
 
-    void load({ selectedLocationMap, storeKeys }, controller.signal);
-
-    return () => controller.abort();
-  }, [selectedLocationMap, storeKeys, load]);
+    return () => {
+      unsubscribe();
+      controller?.abort();
+    };
+  }, [storeKeys, load]);
   
   return {
     storeKeys,
-    dataMarket,
+    supermarketsSegments,
     loadingSupermarkets,
     errorSupermarkets,
-    selectedLocationMap,
-    setSelectedLocationMap,
+    locationUser,
   };
 }

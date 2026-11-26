@@ -70,8 +70,8 @@ export default function VehiclePickerModal({
     catalogLabels,
     catalogBrands,
     catalogModels,
-    loading,
-    error,
+    loadingCatalog,
+    errorCatalog,
     isValid,
     handleVehicleTypeChange,
     handleBrandChange,
@@ -130,7 +130,7 @@ export default function VehiclePickerModal({
           </button>
         </header>
 
-        {loading || loadingVehicle ? (
+        {loadingCatalog || loadingVehicle ? (
           <Center mih={300}>
             <Loader size={36} color="violet" type="dots" />
           </Center>
@@ -142,12 +142,9 @@ export default function VehiclePickerModal({
               <section className="vehicle-modal-section">
                 <h3>¿Cómo realizas tus compras?</h3>
 
-                <Radio.Group
-                  value={vehicleType}
-                  onChange={(value) =>
-                    handleVehicleTypeChange(value as VehicleType)
-                  }
-                >
+                <Radio.Group value={vehicleType} onChange={(value) => 
+                  handleVehicleTypeChange(value as VehicleType)
+                  }>
                   <div className="vehicle-type-grid">
                     {vehicleOptions.map((option) => {
                       const Icon = option.icon;
@@ -156,19 +153,12 @@ export default function VehiclePickerModal({
                       return (
                         <label
                           key={option.value}
-                          className={[
-                            "vehicle-type-card",
-                            selected ? "vehicle-type-card--selected" : "",
-                          ]
+                          className={["vehicle-type-card", selected ? "vehicle-type-card--selected" : "",]
                             .filter(Boolean)
                             .join(" ")}
                         >
                           <div className="vehicle-type-card-top">
-                            <Icon
-                              size={26}
-                              strokeWidth={1.8}
-                              aria-hidden="true"
-                            />
+                            <Icon size={26} strokeWidth={1.8} aria-hidden="true" />
                             <Radio value={option.value} color="violet" />
                           </div>
 
@@ -190,54 +180,37 @@ export default function VehiclePickerModal({
                   <section className="vehicle-modal-section">
                     <h3>Información del vehículo</h3>
 
-                    {error && (
-                      <Alert
-                        color="red"
-                        variant="light"
-                        icon={<AlertCircle size={18} />}
-                        mb="md"
-                      >
-                        {error}
+                    {errorCatalog && (
+                      <Alert color="red" variant="light" icon={<AlertCircle size={18} />} mb="md">
+                        {errorCatalog}
                       </Alert>
                     )}
 
                     <div className="vehicle-form-grid">
                       <Select
                         label="Marca"
-                        placeholder={
-                          loading ? "Cargando marcas..." : "Seleccionar marca"
-                        }
+                        placeholder={loadingCatalog ? "Cargando marcas..." : "Seleccionar marca"}
                         data={catalogBrands}
                         value={selectedBrand}
                         onChange={handleBrandChange}
-                        disabled={loading}
+                        disabled={loadingCatalog}
                         searchable
                         nothingFoundMessage="No se encontraron marcas"
                         radius="md"
-                        comboboxProps={{
-                          withinPortal: true,
-                          zIndex: 1000,
-                        }}
+                        comboboxProps={{ withinPortal: true, zIndex: 1000, }}
                       />
 
                       <Select
                         label="Modelo"
-                        placeholder={
-                          !selectedBrand
-                            ? "Primero selecciona una marca"
-                            : "Seleccionar modelo"
-                        }
+                        placeholder={!selectedBrand ? "Primero selecciona una marca" : "Seleccionar modelo"}
                         data={catalogModels}
                         value={selectedModel}
                         onChange={setSelectedModel}
-                        disabled={!selectedBrand || loading}
+                        disabled={!selectedBrand || loadingCatalog}
                         searchable
                         nothingFoundMessage="No se encontraron modelos"
                         radius="md"
-                        comboboxProps={{
-                          withinPortal: true,
-                          zIndex: 1000,
-                        }}
+                        comboboxProps={{ withinPortal: true, zIndex: 1000, }}
                       />
                     </div>
                     <Select
@@ -249,10 +222,7 @@ export default function VehiclePickerModal({
                       clearable
                       searchable
                       radius="md"
-                      comboboxProps={{
-                        withinPortal: true,
-                        zIndex: 1000,
-                      }}
+                      comboboxProps={{ withinPortal: true, zIndex: 1000, }}
                     />
                   </section>
 
@@ -265,11 +235,7 @@ export default function VehiclePickerModal({
 
                     <div className="vehicle-form-grid">
                       <NumberInput
-                        label={
-                          fuelType === "electric"
-                            ? "Consumo (kWh/100 km)"
-                            : "Rendimiento (km/L)"
-                        }
+                        label={fuelType === "electric" ? "Consumo (kWh/100 km)" : "Rendimiento (km/L)"}
                         value={efficiency}
                         onChange={setEfficiency}
                         min={0.1}
@@ -287,13 +253,7 @@ export default function VehiclePickerModal({
                 Cancelar
               </Button>
 
-              <Button
-                color="violet"
-                radius="md"
-                leftSection={<Check size={17} />}
-                disabled={!isValid}
-                onClick={handleSave}
-              >
+              <Button color="violet" radius="md" leftSection={<Check size={17} />} disabled={!isValid} onClick={handleSave}>
                 Confirmar vehículo
               </Button>
             </footer>

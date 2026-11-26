@@ -2,7 +2,7 @@ import { httpClient } from "../../../shared/api/axios";
 
 import type {
   FuelCalculationRequest,
-  FuelCalculationResponse,
+  FuelCalulateResponse,
 } from "../models/fuelCalculation.models";
 import type { ConsumoVehicularResponse } from "../models/vehicleCatalog.models.ts";
 import type {
@@ -13,8 +13,8 @@ import type {
 export async function calculate(
   request: FuelCalculationRequest,
   signal?: AbortSignal,
-): Promise<FuelCalculationResponse> {
-  const response = await httpClient.post<FuelCalculationResponse>(
+): Promise<FuelCalulateResponse> {
+  const response = await httpClient.post<FuelCalulateResponse>(
     "/api/fuels/calculate",
     request,
     {

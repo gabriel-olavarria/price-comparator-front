@@ -1,21 +1,18 @@
 import { House } from "lucide-react";
 
 import { StoreLogo } from "../../../../shared/components/store-logo/StoreLogo";
-import type { RouteLocation } from "../../models/route.models";
 
 interface RoutePointProps {
-  location: RouteLocation;
+  pointName: string;
 }
 
-export function RoutePoint({ location }: RoutePointProps) {
-  const label = location.isHome ? "Tu casa" : location.name;
+export function RoutePoint({ pointName }: RoutePointProps) {
+  const label = pointName == "Casa" ? "Tu Casa" : pointName;
+  const isHome = pointName === "Casa";
 
   return (
-    <div
-      className="supermarket-route-location"
-      title={location.address || label}
-    >
-      {location.isHome ? (
+    <div className="supermarket-route-location" title={label}>
+      {isHome ? (
         <House
           className="supermarket-route-home-icon"
           size={25}
@@ -23,7 +20,7 @@ export function RoutePoint({ location }: RoutePointProps) {
           aria-hidden="true"
         />
       ) : (
-        <StoreLogo store={location.name} size={30} showBorder={false} />
+        <StoreLogo store={label} size={30} showBorder={false} />
       )}
 
       <span>{label}</span>

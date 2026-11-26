@@ -124,7 +124,7 @@ export function CheapestProductBar() {
 function getCheapestProductCounts(
   data: CheapestStoreResponse[],
 ): CheapestStoreCount[] {
-  console.log(data);
+ 
   return data
     .map((item) => ({
       store: item.store,

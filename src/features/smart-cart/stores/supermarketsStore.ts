@@ -1,45 +1,43 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, subscribeWithSelector } from "zustand/middleware";
 
-import type { NearbySupermarkets } from "../models/supermarketLocation.models";
+import type {
+  RouteResult,
+} from "../models/supermarketLocation.models";
 
-interface SupermarketStore {
-  supermarkets: NearbySupermarkets | null;
+interface SupermarketSegmentsStore {
+  supermarketsSegments: RouteResult | null;
   loadingSupermarkets: boolean;
   errorSupermarkets: string | null;
-  setSupermarkets: (data: NearbySupermarkets) => void;
+
+  setSupermarkets: (supermarketsSegments: RouteResult | null) => void;
   setLoadingSupermarkets: (loading: boolean) => void;
   setErrorSupermarkets: (error: string | null) => void;
 }
 
-export const useSupermarketStore = create<SupermarketStore>()(
-  persist(
-    (set) => ({
-      supermarkets: null,
-      loadingSupermarkets: false,
-      errorSupermarkets: null,
+export const useSupermarketStore = create<SupermarketSegmentsStore>()(
+  subscribeWithSelector(
+    persist(
+      (set) => ({
+        supermarketsSegments: null,
+        loadingSupermarkets: false,
+        errorSupermarkets: null,
 
-      setSupermarkets: (data) =>
-        set((state) => ({
-          supermarkets:
-            JSON.stringify(state.supermarkets) === JSON.stringify(data)
-              ? state.supermarkets
-              : data
-        })),
+        setSupermarkets: (supermarketsSegments) =>
+          set({ supermarketsSegments }),
 
-      setLoadingSupermarkets: (loadingSupermarkets) =>
-        set({ loadingSupermarkets }),
+        setLoadingSupermarkets: (loadingSupermarkets) =>
+          set({ loadingSupermarkets }),
 
-      setErrorSupermarkets: (errorSupermarkets) =>
-        set({ errorSupermarkets}),
- 
-    }),
-    {
-      name: "price-comparator-supermarkets-v1",
-      version: 1,
-      partialize: (state) => ({
-        supermarkets: state.supermarkets,
+        setErrorSupermarkets: (errorSupermarkets) => set({ errorSupermarkets }),
       }),
-    },
+      {
+        name: "price-comparator-supermarkets",
+        version: 1,
+        partialize: (state) => ({
+          supermarketsSegments: state.supermarketsSegments,
+        }),
+      },
+    ),
   ),
 );

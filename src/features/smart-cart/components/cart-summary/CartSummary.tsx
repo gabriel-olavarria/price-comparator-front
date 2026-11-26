@@ -8,12 +8,7 @@ import { SummaryEmpty } from "../summary-empty/SummaryEmpty.tsx";
  
 
 export default function CartSummary() {
-  const {
-    storeKeys,
-    dataMarket,
-    selectedLocationMap,
-    setSelectedLocationMap,
-  } = useCartSummary();
+  const { storeKeys, supermarketsSegments } = useCartSummary();
 
   return (
     <>
@@ -26,18 +21,11 @@ export default function CartSummary() {
               <CartStats />
             </div>
             <div className="cart-summary-route">
-              <SupermarketRoute
-                nearestByStore={dataMarket?.nearestByStore ?? []}
-                selectedLocationMap={selectedLocationMap}
-                setSelectedLocationMap={setSelectedLocationMap}
-              />
+              <SupermarketRoute routeSegments={supermarketsSegments} />
             </div>
           </div>
           <div className="cart-summary-bottom">
-            <FuelCalculate
-              nearestByStore={dataMarket?.nearestByStore ?? []}
-              selectedLocationMap={selectedLocationMap}
-            />
+            <FuelCalculate routeSegments={supermarketsSegments} />
           </div>
 
           <footer className="cart-summary-footer">

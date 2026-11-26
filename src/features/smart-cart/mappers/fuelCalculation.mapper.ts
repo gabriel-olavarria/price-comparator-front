@@ -1,39 +1,37 @@
-import type { SelectedLocation } from "../models/location.models";
-import type { NearbySupermarkets } from "../models/supermarketLocation.models";
+
 import type {
   FuelCalculationRequest,
-  FuelType,
 } from "../models/fuelCalculation.models";
+import type { SelectedLocation } from "../models/location.models.ts";
 import type { VehicleConfiguration } from "../models/vehicle.models.ts";
+import type { NearbySupermarketsResponse } from "../models/supermarketLocation.models.ts";
+ 
+ 
+
 
 type FuelCalculationMapperParams = {
-  selectedLocationMap: SelectedLocation;
-  selectedFuelType: FuelType;
-  nearestByStore: NearbySupermarkets["nearestByStore"];
-  selectedVehicle: VehicleConfiguration;
+  currentLocation: SelectedLocation;
+  routeSegments: NearbySupermarketsResponse["routeResult"];
+  currentVehicle: VehicleConfiguration;
 };
  
 
 export function toFuelCalculationRequest({
-  selectedLocationMap,
-  selectedFuelType,
-  nearestByStore,
-  selectedVehicle
+  currentLocation,
+  routeSegments,
+  currentVehicle,
 }: FuelCalculationMapperParams): FuelCalculationRequest {
-  console.log(selectedLocationMap);
- 
-  
   return {
-    direccion: selectedLocationMap.address,
-    latitud: selectedLocationMap.latitude,
-    longitud: selectedLocationMap.longitude,
-    region: selectedLocationMap.state,
-    comuna: selectedLocationMap.city,
-    tipoCombustible: selectedFuelType,
-    rendimientoMixto: selectedVehicle.efficiency!,
-    supermercados: nearestByStore.map((store) => ({
-      name: store.name,
-      geometry: store.geometry,
-    })),
+    userLocation: {
+      region: currentLocation.state,
+      comuna: currentLocation.city,
+      longitud: currentLocation.longitude,
+      latitud: currentLocation.latitude,
+    },
+    rendimientoMixto: currentVehicle.efficiency!,
+    tramo: {
+      TotalDistanceKm: routeSegments.totalDistanceKm,
+      segments: routeSegments.segments,
+    },
   };
 }
