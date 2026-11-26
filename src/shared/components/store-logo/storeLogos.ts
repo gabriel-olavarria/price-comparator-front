@@ -3,7 +3,7 @@ import jumboLogo from "../../../assets/jumbo-logo.png";
 import liderLogo from "../../../assets/lider-logo.png";
 import santaIsabelLogo from "../../../assets/santaIsabel.png";
 import tottusLogo from "../../../assets/tottus-logo.png";
-import acuentaLogo from "../../../assets/acuenta-logo.png";
+import acuentaLogo from "../../../assets/ACuenta.png";
 
 export const storeLogos: Record<string, string> = {
   UNIMARC: unimarcLogo,
